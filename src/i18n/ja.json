@@ -132,6 +132,8 @@
         "set_custom_title_button": "カスタムタイトル…",
         "set_custom_interval_button": "カスタム間隔 (分単位)…",
         "set_custom_hashtags_button": "カスタムハッシュタグ…",
+        "set_topic_button": "トピックに送信…",
+        "sub_topic_unavailable_prompt": "この購読の送信先のトピックは閉鎖または削除されています。購読を有効にする前に、トピックを開き直すか、別のトピックで /set_topic を使用してください。",
         "set_interval_prompt": "監視間隔を選択してください。",
         "set_length_limit_prompt": "長さ制限を選択してください。\n\n記事の長さが制限を超える場合や、一通のメッセージで送信できない場合は、Telegraph で送信されます。\nTelegraph での送信に失敗した場合は、そのタイトルとソースのみが送信されます。",
         "length_limit_only_effective_if_send_mode_auto": "長さ制限は、送信モードが自動の場合にのみ有効です。",

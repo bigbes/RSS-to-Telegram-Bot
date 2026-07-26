@@ -132,18 +132,35 @@ async def opml_import(
         logger.warning(f'Failed to parse opml file from {chat_id}')
         return
 
+    feed_urls = tuple(
+        (
+            (feed.url, feed.text)
+            if feed.text and feed.text != feed.title_orig
+            else feed.url
+        ) for feed in opml_d.feeds
+    )
+
+    # A file exported by RSStT remembers the topic each feed was sent to, by title. Match those titles against the
+    # topics of the chat being imported into, so that a topic layout survives an export/import round trip, even
+    # into another chat. Feeds whose topic is not found fall back to the topic the file was sent to.
+    topic_ids_by_title = (
+        await inner.utils.get_topic_ids_by_title(chat_id)
+        if any(feed.topic for feed in opml_d.feeds)
+        else {}
+    )
+    topic_id_map = {
+        url: topic_ids_by_title[feed.topic]
+        for url, feed in zip(feed_urls, opml_d.feeds)
+        if feed.topic and feed.topic in topic_ids_by_title
+    }
+
     import_result = await inner.sub.subs(
         chat_id,
-        tuple(
-            (
-                (feed.url, feed.text)
-                if feed.text and feed.text != feed.title_orig
-                else feed.url
-            ) for feed in opml_d.feeds
-        ),
+        feed_urls,
         lang=lang,
         # Import into the topic the opml file was sent to, but only if the command targets the current chat.
         topic_id=get_topic_id(event) if chat_id == event.chat_id else None,
+        topic_id_map=topic_id_map,
     )
     logger.info(f'Imported feed(s) for {chat_id}')
     msg = await send_success_and_failure_msg(reply, **import_result, lang=lang, edit=True)

@@ -132,6 +132,8 @@
         "set_custom_title_button": "사용자 지정 제목…",
         "set_custom_interval_button": "사용자 지정 간격(분)…",
         "set_custom_hashtags_button": "맞춤 해시태그…",
+        "set_topic_button": "주제로 전송…",
+        "sub_topic_unavailable_prompt": "이 구독이 전송되는 주제가 닫혔거나 삭제되었습니다. 구독을 활성화하기 전에 주제를 다시 열거나 다른 주제에서 /set_topic 명령을 사용하세요.",
         "set_interval_prompt": "모니터링 간격을 선택하세요.",
         "set_length_limit_prompt": "길이 제한을 선택하세요.\n\n게시글이 길이 제한을 초과하거나 단일 메시지로 보낼 수 없는 경우 Telegraph를 통해 전송됩니다.\nTelegraph를 통한 전송에 실패하면 제목과 출처만 전송됩니다.",
         "length_limit_only_effective_if_send_mode_auto": "길이 제한은 전송 모드가 자동인 경우에만 적용됩니다.",

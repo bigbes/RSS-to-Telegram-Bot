@@ -132,6 +132,8 @@
         "set_custom_title_button": "Benutzerdefinierter Titel…",
         "set_custom_interval_button": "Benutzerdefiniertes Intervall (in Minuten)…",
         "set_custom_hashtags_button": "Benutzerdefinierte Hashtags…",
+        "set_topic_button": "In ein Thema senden…",
+        "sub_topic_unavailable_prompt": "Das Thema, in das dieses Abonnement gesendet wird, ist geschlossen oder gelöscht. Öffne es erneut oder verwende /set_topic in einem anderen Thema, bevor du das Abonnement aktivierst.",
         "set_interval_prompt": "Bitte wähle ein Abfrageintervall.",
         "set_length_limit_prompt": "Bitte wähle ein Längenlimit.\n\nWenn ein Beitrag länger als das Limit ist ODER nicht in einer einzelnen Nachricht gesendet werden kann, wird er über Telegraph gesendet.\nFalls das Senden über Telegraph fehlschlägt, werden nur der Titel und die Quelle gesendet.",
         "length_limit_only_effective_if_send_mode_auto": "Das Längenlimit ist nur wirksam, wenn der Sendemodus auf Automatik gesetzt ist.",

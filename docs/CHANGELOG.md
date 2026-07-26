@@ -5,7 +5,7 @@
 ### Highlights
 
 - **Support Python 3.13**: Officially supports Python 3.13. The official Docker image is now based on Python 3.13 as well.
-- **Support for topic groups**: A subscription can now be bound to a forum topic. Send `/sub` (or `/import`) inside a topic and every post of the subscriptions it creates will be sent to that topic. An existing subscription can be moved with the new `/set_topic sub_id` command, sent inside the topic it should be sent to; sending it outside any topic binds the subscription back to the group itself. `/list` and the subscription info of `/set` show where each subscription is sent to. Existing subscriptions and those made in the "General" topic are unaffected: their posts are sent to the group itself. Answers to commands used in a topic stay in that topic as well, instead of showing up in the "General" topic.
+- **Support for topic groups**: A subscription can now be bound to a forum topic. Send `/sub` (or `/import`) inside a topic and every post of the subscriptions it creates will be sent to that topic. An existing subscription can be moved with the new `/set_topic sub_id` command (also offered as a button in `/set`), sent inside the topic it should be sent to; sending it outside any topic binds the subscription back to the group itself. `/list` and the subscription info of `/set` show where each subscription is sent to. `/export` records the topic of each subscription by title and `/import` matches those titles against the topics of the chat being imported into, so a topic layout survives a round trip, even into another group. Existing subscriptions and those made in the "General" topic are unaffected: their posts are sent to the group itself. Answers to commands used in a topic stay in that topic as well, instead of showing up in the "General" topic.
 
 ### Enhancements
 
@@ -15,7 +15,7 @@
 ### Bug fixes
 
 - **Malformed `<`**: Fixed an issue where `<` in `<code>` or `<pre>` was rendered as `&LT`. This was an upstream issue, see also [wilsonzlin/minify-html#109](https://github.com/wilsonzlin/minify-html/issues/109).
-- **No longer leaves a topic group when a topic is closed**: Previously, the bot left the whole group once it could not send a message because the "General" topic was closed. Now only the subscription bound to the closed (or deleted) topic is deactivated, and the group is notified.
+- **No longer leaves a topic group when a topic is closed**: Previously, the bot left the whole group once it could not send a message because the "General" topic was closed. Now only the subscription bound to the closed (or deleted) topic is deactivated, and the group is notified. A deleted topic is detected as well, even though Telegram accepts such a post and puts it in the group instead of rejecting it. Activating a subscription whose topic is still gone is refused instead of silently failing on the next post.
 
 ## v2.10.0: Container health check, chat-specific #hashtags, and more
 

@@ -132,6 +132,8 @@
         "set_custom_title_button": "Titre personnalisé…",
         "set_custom_interval_button": "Intervalle personnalisé (en minutes)…",
         "set_custom_hashtags_button": "Hashtags personnalisé…",
+        "set_topic_button": "Envoyer dans un sujet…",
+        "sub_topic_unavailable_prompt": "Le sujet auquel cet abonnement est envoyé est fermé ou supprimé. Rouvrez-le, ou utilisez /set_topic dans un autre sujet, avant d'activer l'abonnement.",
         "set_interval_prompt": "Veuillez sélectionner un intervalle de surveillance.",
         "set_length_limit_prompt": "S'il vous plaît sélectionnez une limite de caractères.\n\nSi un poste est plus long que cette limite ou ne peux être envoyé en un seule message, il sera envoyé par Telegraph\nSi l'envoi par Telegraph échoue, seule le titre et la source seront envoyés.",
         "length_limit_only_effective_if_send_mode_auto": "La limite de caractère ne fonctionne que si le mode d'envoi est réglé en automatique.",

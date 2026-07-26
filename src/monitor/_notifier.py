@@ -30,7 +30,7 @@ from .. import db, env, web
 from ..command import inner
 from ..command.utils import default_leave_chat_helper, escape_html, TOPIC_UNAVAILABLE_ERRORS
 from ..compat import nullcontext
-from ..errors_collection import EntityNotFoundError, UserBlockedErrors
+from ..errors_collection import EntityNotFoundError, UserBlockedErrors, TopicUnavailableError
 from ..helpers.bg import bg
 from ..helpers.pipeline import SameFuncPipelineContextManager, StopPipeline
 from ..helpers.timeout import BatchTimeout
@@ -295,6 +295,13 @@ class Notifier:
             except BadRequestError as e:
                 if e.message in TOPIC_UNAVAILABLE_ERRORS:
                     return await self._on_topic_unavailable(sub=sub, err_msg=e.message)
+            except TopicUnavailableError as e:
+                # The post was sent to the chat itself instead of the topic. Make sure that the topic is really
+                # gone before giving up on the sub: anything else is not worth deactivating a sub for.
+                if sub.topic_id in await inner.utils.get_topics(user_id, (sub.topic_id,), use_cache=False):
+                    logger.warning(f'{e} but the topic still exists: {self._describe_subtask(sub)}')
+                    return None
+                return await self._on_topic_unavailable(sub=sub, err_msg='TOPIC_DELETED')
         except Exception as e:
             logger.error(f'Failed to send {post.link} (feed: {post.feed_link}, user: {sub.user_id}):', exc_info=e)
             try:
@@ -334,11 +341,14 @@ class Notifier:
             await inner.utils.activate_or_deactivate_sub(sub.user_id, sub, activate=False)
             user = await db.User.get_or_none(id=sub.user_id)
             lang = user.lang if user else None
+            # A closed topic still has a title, a deleted one does not; name it whenever it can be told.
+            topic_title = (await inner.utils.get_topic_titles(sub.user_id, (sub.topic_id,))).get(sub.topic_id)
             with suppress(*UserBlockedErrors, BadRequestError):  # the chat itself may be unreachable as well
                 await env.bot.send_message(
                     sub.user_id,
                     '\n'.join((
-                        f'<a href="{self._feed.link}">{escape_html(sub.title or self._feed.title)}</a>',
+                        f'<a href="{self._feed.link}">{escape_html(sub.title or self._feed.title)}</a>'
+                        + (f' ({escape_html(topic_title)})' if topic_title else ''),
                         i18n[lang]['sub_deactivated_topic_unavailable_warn'],
                     )),
                     parse_mode='html',

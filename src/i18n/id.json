@@ -132,6 +132,8 @@
         "set_custom_title_button": "Judul ubahsuai…",
         "set_custom_interval_button": "Interval ubahsuai (dalam menit)…",
         "set_custom_hashtags_button": "Tagar ubahsuai…",
+        "set_topic_button": "Kirim ke topik…",
+        "sub_topic_unavailable_prompt": "Topik tujuan langganan ini ditutup atau dihapus. Buka kembali topik tersebut, atau gunakan /set_topic di topik lain, sebelum mengaktifkan langganan.",
         "set_interval_prompt": "Silakan pilih interval untuk monitor.",
         "set_length_limit_prompt": "Pilih batas panjang.\n\nJika pos lebih panjang dari batas ATAU tidak dapat dikirim dalam satu pesan, ia akan dikirim melalui Telegraph.\nApabila pengiriman melalui Telegraph gagal, hanya judul dan sumber yang akan dikirim.",
         "length_limit_only_effective_if_send_mode_auto": "Batas panjang efektif hanya saat mode pengirimannya otomatis.",

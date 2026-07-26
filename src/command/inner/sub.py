@@ -16,7 +16,7 @@
 
 from __future__ import annotations
 from typing import Union, Optional, AnyStr
-from collections.abc import Sequence
+from collections.abc import Sequence, Mapping
 
 import re
 import asyncio
@@ -31,7 +31,7 @@ from ... import db, web, env
 from ...aio_helper import run_async
 from ...i18n import i18n
 from .utils import update_interval, list_sub, filter_urls, logger, escape_html, \
-    check_sub_limit, calculate_update
+    check_sub_limit, calculate_update, get_topic_titles
 from ...parsing.utils import ensure_plain
 
 FeedSnifferCache = TTLCache(maxsize=256, ttl=60 * 60 * 24)
@@ -169,7 +169,8 @@ async def sub(user_id: int,
 async def subs(user_id: int,
                feed_urls: Sequence[Union[str, tuple[str, str]]],
                lang: Optional[str] = None,
-               topic_id: Optional[int] = None) \
+               topic_id: Optional[int] = None,
+               topic_id_map: Optional[Mapping[Union[str, tuple[str, str]], Optional[int]]] = None) \
         -> Optional[dict[str, Union[tuple[dict[str, Union[int, str, db.Sub, None]], ...], str, int]]]:
     if not feed_urls:
         return None
@@ -187,7 +188,13 @@ async def subs(user_id: int,
         failure = []
 
     result = await asyncio.gather(
-        *(sub(user_id, url, lang=lang, topic_id=topic_id) for url in remaining_feed_urls)
+        *(
+            sub(user_id, url, lang=lang,
+                # `topic_id_map` overrides the default topic per feed, used when importing an OPML file that
+                # remembers which topic each feed was sent to.
+                topic_id=topic_id_map.get(url, topic_id) if topic_id_map else topic_id)
+            for url in remaining_feed_urls
+        )
     )
 
     success = tuple(sub_d for sub_d in result if sub_d['sub'])
@@ -305,6 +312,7 @@ async def unsub_all(user_id: int, lang: Optional[str] = None) \
 
 async def export_opml(user_id: int) -> Optional[bytes]:
     sub_list = await list_sub(user_id)
+    topic_titles = await get_topic_titles(user_id, (_sub.topic_id for _sub in sub_list if _sub.topic_id))
     opml = BeautifulSoup(OPML_TEMPLATE, 'lxml-xml')
     create_time = opml.new_tag('dateCreated')
     create_time.string = opml.new_string(datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S UTC'))
@@ -312,12 +320,17 @@ async def export_opml(user_id: int) -> Optional[bytes]:
     empty_flags = True
     for _sub in sub_list:
         empty_flags = False
-        outline = opml.new_tag(name='outline', attrs=dict(
+        attrs = dict(
             type='rss',
             text=_sub.title or _sub.feed.title,
             title=_sub.feed.title,
             xmlUrl=_sub.feed.link
-        ))
+        )
+        # Only a title is worth exporting: a topic id means nothing once imported into another chat. A topic that
+        # cannot be resolved to a title is thus not exported at all.
+        if topic_title := topic_titles.get(_sub.topic_id):
+            attrs['rsstt_topic'] = topic_title
+        outline = opml.new_tag(name='outline', attrs=attrs)
         opml.body.append(outline)
     if empty_flags:
         return None

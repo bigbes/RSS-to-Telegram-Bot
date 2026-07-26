@@ -24,7 +24,7 @@ import listparser.opml
 
 class OpmlMixin(listparser.opml.OpmlMixin):
     """
-    Add `title_orig`.
+    Add `title_orig` and `topic`.
 
     Originated from listparser v0.20 (MIT License)
     https://github.com/kurtmckee/listparser/blob/v0.20/src/listparser/opml.py#L21-L76
@@ -43,6 +43,9 @@ class OpmlMixin(listparser.opml.OpmlMixin):
         text = attrs.get("text", "").strip()
         title_orig = attrs.get("title", "").strip()
         title = text or title_orig
+        # The title of the forum topic the feed was sent to, written by RSStT. Topic ids are chat-specific, thus
+        # useless once the file is imported into another chat, while a title can be matched in any chat.
+        topic = attrs.get("rsstt_topic", "").strip()
 
         url = None
         append_to = None
@@ -75,7 +78,8 @@ class OpmlMixin(listparser.opml.OpmlMixin):
             # This is a brand-new URL
             # ================ DIFF ================
             # obj = common.SuperDict({"url": url, "title": title})
-            obj = listparser.common.SuperDict({"url": url, "title": title, "text": text, "title_orig": title_orig})
+            obj = listparser.common.SuperDict({"url": url, "title": title, "text": text, "title_orig": title_orig,
+                                               "topic": topic})
             self.found_urls[url] = (append_to, obj)
             self.harvest[append_to].append(obj)
         else:

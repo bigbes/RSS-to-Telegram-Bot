@@ -132,6 +132,8 @@
         "set_custom_title_button": "Własny tytuł…",
         "set_custom_interval_button": "Własny interwał (w minutach)…",
         "set_custom_hashtags_button": "Własne hasztagi…",
+        "set_topic_button": "Wyślij do tematu…",
+        "sub_topic_unavailable_prompt": "Temat, do którego wysyłana jest ta subskrypcja, jest zamknięty lub usunięty. Otwórz go ponownie lub użyj /set_topic w innym temacie, zanim włączysz subskrypcję.",
         "set_interval_prompt": "Wybierz interwał monitorowania.",
         "set_length_limit_prompt": "",
         "length_limit_only_effective_if_send_mode_auto": "",

@@ -135,6 +135,8 @@
         "set_custom_title_button": "自訂標題…",
         "set_custom_interval_button": "自訂間隔 (以分鐘為單位)…",
         "set_custom_hashtags_button": "自訂 hashtag…",
+        "set_topic_button": "發送到話題…",
+        "sub_topic_unavailable_prompt": "該訂閱發送到的話題已關閉或刪除。請先重新開啟該話題，或在另一個話題中使用 /set_topic，然後再啟用該訂閱。",
         "set_interval_prompt": "請選擇監視間隔。",
         "set_length_limit_prompt": "請選擇長度限制。\n\n如果文章的長度超過限制或無法在單個消息中傳送，則將透過 Telegraph 傳送。\n如果透過 Telegraph 傳送失敗，則只會傳送其標題和來源。",
         "length_limit_only_effective_if_send_mode_auto": "長度限制僅在傳送方式為自動時有效。",

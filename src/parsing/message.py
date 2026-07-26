@@ -26,7 +26,7 @@ from telethon.utils import get_message_id
 from collections import defaultdict
 
 from .. import log, env, locks
-from ..errors_collection import MediaSendFailErrors
+from ..errors_collection import MediaSendFailErrors, TopicUnavailableError
 from .medium import Media, TypeMessage, TypeMessageMedia, VIDEO, ANIMATION, MEDIA_GROUP
 from .splitter import html_to_telegram_split
 
@@ -93,17 +93,36 @@ class MessageDispatcher:
             message = Message(self.user_id, None, None, media, media_type, self.link_preview, self.silent)
             self.messages.append(message)
 
+    def _sent_into_topic(self, msg: Union[types.Message, list[types.Message]]) -> bool:
+        """
+        Tell whether a sent message really landed in the topic it was addressed to.
+
+        Telegram rejects sending to a closed topic, but a deleted one has no message to reply to anymore, so the
+        reply is silently dropped and the message lands in the chat itself.
+        """
+        first = msg[0] if isinstance(msg, list) else msg
+        reply_to = getattr(first, 'reply_to', None)
+        if isinstance(reply_to, types.MessageReplyHeader):
+            return self.topic_id in (reply_to.reply_to_top_id, reply_to.reply_to_msg_id)
+        # Telethon constructs the message itself when the server sends a short update (private chats only, where
+        # no topic can exist), in which case the reply is whatever was requested.
+        return isinstance(reply_to, types.InputReplyToMessage)
+
     async def send_messages(self):
         if not self.messages:
             await self.generate_messages()
         sent_msgs: list[types.Message] = []
+        missed_topic = False
         try:
             async with self.user_sending_lock[self.user_id]:
                 for message in self.messages:
                     # Replying to the message that created a topic is how a message is posted into that topic.
                     # The following messages reply to the previous one, thus they stay in the topic as well.
+                    addressed_topic = not sent_msgs and self.topic_id is not None
                     msg = await message.send(reply_to=sent_msgs[-1] if sent_msgs else self.topic_id)
                     if msg:
+                        if addressed_topic:
+                            missed_topic = not self._sent_into_topic(msg)
                         sent_msgs.extend(msg) if isinstance(msg, list) else sent_msgs.append(msg)
         except MediaSendFailErrors as e:
             if sent_msgs:
@@ -112,6 +131,9 @@ class MessageDispatcher:
                     return_exceptions=True
                 )
             raise e
+        if missed_topic:
+            # Raised only once the whole post has been sent, so that it is not left half-sent.
+            raise TopicUnavailableError(self.topic_id, 'the reply addressing the topic was dropped')
 
 
 class Message:

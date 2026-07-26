@@ -38,6 +38,20 @@ class ContextTimeoutError(asyncio.TimeoutError):
     pass
 
 
+class TopicUnavailableError(Exception):
+    """
+    Raised when a post could not be sent to the forum topic a sub is bound to.
+
+    Telegram rejects sending to a closed topic, but silently drops the reply to a deleted one, sending the post to
+    the chat itself instead. The latter is detected after the fact, thus this error is not an RPC error.
+    """
+
+    def __init__(self, topic_id: int, reason: str):
+        self.topic_id = topic_id
+        self.reason = reason
+        super().__init__(f'Topic {topic_id} is unavailable: {reason}')
+
+
 UserBlockedErrors: tuple = (UserIsBlockedError, UserIdInvalidError, ChatWriteForbiddenError, ChannelPrivateError,
                             InputUserDeactivatedError, ChatAdminRequiredError, EntityNotFoundError, ChatRestrictedError)
 InvalidMediaErrors: tuple = (PhotoInvalidDimensionsError, PhotoSaveFileInvalidError, PhotoInvalidError,

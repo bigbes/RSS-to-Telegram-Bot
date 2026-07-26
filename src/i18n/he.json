@@ -135,6 +135,8 @@
         "set_custom_title_button": "כותרת מותאמת אישית...",
         "set_custom_interval_button": "מרווח מותאם אישית (בדקות)...",
         "set_custom_hashtags_button": "האשטאגים מותאמים אישית...",
+        "set_topic_button": "שליחה לנושא…",
+        "sub_topic_unavailable_prompt": "הנושא שאליו נשלח המנוי הזה סגור או נמחק. פתח אותו מחדש, או השתמש ב-/set_topic בנושא אחר, לפני הפעלת המנוי.",
         "set_interval_prompt": "נא בחר מרווח מוניטור.",
         "set_length_limit_prompt": "אנא בחר מגבלת אורך.\n\nאם פוסט ארוך מהמגבלה או שלא ניתן לשלוח אותו בהודעה אחת, הוא יישלח באמצעות טלגרף.\nאם השליחה באמצעות טלגרף נכשלת, רק הכותרת והמקור שלו ישלח.",
         "length_limit_only_effective_if_send_mode_auto": "מגבלת האורך יעילה רק כאשר מצב השליחה היא אוטומטית.",

@@ -271,7 +271,7 @@ async def get_customization_buttons(sub_or_user: Union[db.Sub, db.User],
         ),
         None
         if is_user
-        else (
+        else tuple(filter(None, (
             Button.switch_inline(
                 f"{i18n[lang]['set_custom_title_button']}",
                 query=(
@@ -290,7 +290,16 @@ async def get_customization_buttons(sub_or_user: Union[db.Sub, db.User],
                 ),
                 same_peer=True,
             ),
-        ),
+            # The command takes its topic from where it is sent, so it is only offered in the chat it belongs to,
+            # never in a private chat operating that chat remotely.
+            Button.switch_inline(
+                f"{i18n[lang]['set_topic_button']}",
+                query=f'/set_topic {sub_or_user.id} ',
+                same_peer=True,
+            )
+            if not tail and sub_or_user.user_id < 0
+            else None,
+        ))),
         (Button.inline(f'{i18n[lang]["cancel"]}', data='cancel'),)
         if is_user
         else (Button.inline(f'< {i18n[lang]["back"]}', data=f'get_set_page|{page}{tail}'),),

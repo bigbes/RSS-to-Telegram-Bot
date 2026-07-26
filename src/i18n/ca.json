@@ -132,6 +132,8 @@
         "set_custom_title_button": "Títol personalitzat…",
         "set_custom_interval_button": "Interval personalitzat (en minuts)…",
         "set_custom_hashtags_button": "Hashtags personalitzats…",
+        "set_topic_button": "Enviar a un tema…",
+        "sub_topic_unavailable_prompt": "El tema on s'envia aquesta subscripció està tancat o eliminat. Torna a obrir-lo, o fes servir /set_topic en un altre tema, abans d'activar la subscripció.",
         "set_interval_prompt": "Seleccionar un interval de monitor.",
         "set_length_limit_prompt": "Selecciona un límit de longitud.\n\nSi una publicació és superior al límit O no es pot enviar en un sol missatge, s'enviarà a través de Telegraph.\nSi l'enviament a través de Telegraph falla, només s'enviarà el seu títol i font.",
         "length_limit_only_effective_if_send_mode_auto": "El límit de longitud només funciona quan el mode d'enviament és automàtic.",

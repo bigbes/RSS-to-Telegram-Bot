@@ -132,6 +132,8 @@
         "set_custom_title_button": "عنوان مخصص…",
         "set_custom_interval_button": "الفاصل الزمني المخصص (بالدقائق) …",
         "set_custom_hashtags_button": "وسوم مخصصة…",
+        "set_topic_button": "الإرسال إلى موضوع…",
+        "sub_topic_unavailable_prompt": "الموضوع الذي يُرسل إليه هذا الاشتراك مغلق أو محذوف. أعد فتحه، أو استخدم /set_topic في موضوع آخر، قبل تنشيط الاشتراك.",
         "set_interval_prompt": "الرجاء تحديد الفاصل الزمني للمراقبة.",
         "set_length_limit_prompt": "الرجاء تحديد حد الطول.\n\nإذا كان المنشور أطول من الحد أو لا يمكن إرساله في رسالة واحدة ، فسيتم إرساله عبر Telegraph.\nإذا فشل الإرسال عبر Telegraph ، فسيتم إرسال عنوانه ومصدره فقط.",
         "length_limit_only_effective_if_send_mode_auto": "يكون حد الطول ساريًا فقط عندما يكون وضع الإرسال تلقائيًا.",

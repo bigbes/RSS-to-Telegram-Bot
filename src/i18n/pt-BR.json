@@ -132,6 +132,8 @@
         "set_custom_title_button": "Título personalizado…",
         "set_custom_interval_button": "Intervalo personalizado (em minutos)…",
         "set_custom_hashtags_button": "Hashtags personalizadas…",
+        "set_topic_button": "Enviar para um tópico…",
+        "sub_topic_unavailable_prompt": "O tópico para o qual esta assinatura é enviada está fechado ou foi excluído. Reabra-o, ou use /set_topic em outro tópico, antes de ativar a assinatura.",
         "set_interval_prompt": "Selecione um intervalo de monitoração.",
         "set_length_limit_prompt": "Por favor, selecione um limite de comprimento.\n\nSe um post for maior que o limite ou não puder ser enviado em uma única mensagem, ele será enviado via Telegraph.\nSe o envio via Telegraph falhar, apenas seu título e fonte serão enviados.",
         "length_limit_only_effective_if_send_mode_auto": "O limite de comprimento é efetivo somente quando o modo de envio é automático.",

@@ -16,6 +16,7 @@
 
 from __future__ import annotations
 from typing import Any, Union, Optional
+from typing_extensions import Final
 from collections.abc import Iterable, Sequence
 
 import asyncio
@@ -24,7 +25,7 @@ from collections import defaultdict
 from itertools import chain, repeat
 from cachetools import TTLCache
 from telethon import Button
-from telethon.tl.functions.channels import GetForumTopicsByIDRequest
+from telethon.tl.functions.channels import GetForumTopicsByIDRequest, GetForumTopicsRequest
 from telethon.tl.types import KeyboardButtonCallback, ForumTopic
 
 try:
@@ -39,8 +40,45 @@ logger = log.getLogger('RSStT.command')
 
 emptyButton = Button.inline(' ', data='null')
 
-# {(chat_id, topic_id): topic title}, topics are rarely renamed, but the cache must not outlive a rename by long
-TopicTitleCache: TTLCache = TTLCache(maxsize=256, ttl=60 * 10)
+# {(chat_id, topic_id): ForumTopic}, topics are rarely changed, but the cache must not outlive a change by long
+TopicCache: TTLCache = TTLCache(maxsize=256, ttl=60 * 10)
+# How many topics of a chat to enumerate at most when matching topics by title
+TOPIC_ENUMERATION_LIMIT: Final[int] = 100
+
+
+async def get_topics(chat_id: int, topic_ids: Iterable[int], use_cache: bool = True) -> dict[int, ForumTopic]:
+    """
+    Get forum topics by their ids.
+
+    :param chat_id: the id of the topic group
+    :param topic_ids: the ids of the topics to get
+    :param use_cache: use the cached topics if possible? Pass `False` if the state of a topic matters
+    :return: {topic id: topic}, lacking the topics that could not be fetched (deleted ones, for instance)
+    """
+    topics: dict[int, ForumTopic] = {}
+    missing_ids: list[int] = []
+    for topic_id in set(topic_ids):
+        cached = TopicCache.get((chat_id, topic_id)) if use_cache else None
+        if cached is not None:
+            topics[topic_id] = cached
+        else:
+            missing_ids.append(topic_id)
+
+    if not missing_ids:
+        return topics
+
+    try:
+        res = await env.bot(GetForumTopicsByIDRequest(await env.bot.get_input_entity(chat_id), missing_ids))
+    except Exception as e:
+        # not a forum anymore, the bot was kicked, etc. The caller falls back to the topic ids.
+        logger.debug(f'Failed to fetch the topics of {chat_id}:', exc_info=e)
+        return topics
+
+    for topic in res.topics:
+        if isinstance(topic, ForumTopic):  # the deleted ones are `ForumTopicDeleted`, which have no title
+            topics[topic.id] = topic
+            TopicCache[(chat_id, topic.id)] = topic
+    return topics
 
 
 async def get_topic_titles(chat_id: int, topic_ids: Iterable[int]) -> dict[int, str]:
@@ -49,32 +87,38 @@ async def get_topic_titles(chat_id: int, topic_ids: Iterable[int]) -> dict[int, 
 
     :param chat_id: the id of the topic group
     :param topic_ids: the ids of the topics to get the titles of
-    :return: {topic id: topic title}, lacking the topics that could not be fetched (deleted ones, for instance)
+    :return: {topic id: topic title}, lacking the topics that could not be fetched
     """
-    titles: dict[int, str] = {}
-    missing_ids: list[int] = []
-    for topic_id in set(topic_ids):
-        cached = TopicTitleCache.get((chat_id, topic_id))
-        if cached is not None:
-            titles[topic_id] = cached
-        else:
-            missing_ids.append(topic_id)
+    return {topic_id: topic.title for topic_id, topic in (await get_topics(chat_id, topic_ids)).items()}
 
-    if not missing_ids:
-        return titles
 
+async def get_topic_ids_by_title(chat_id: int) -> dict[str, int]:
+    """
+    Enumerate the topics of a chat, so that topics exported as titles can be matched to the topics of a chat.
+
+    :param chat_id: the id of the topic group
+    :return: {topic title: topic id}, empty if the chat is not a topic group
+    """
     try:
-        res = await env.bot(GetForumTopicsByIDRequest(await env.bot.get_input_entity(chat_id), missing_ids))
+        res = await env.bot(GetForumTopicsRequest(
+            await env.bot.get_input_entity(chat_id),
+            offset_date=None, offset_id=0, offset_topic=0, limit=TOPIC_ENUMERATION_LIMIT,
+        ))
     except Exception as e:
-        # not a forum anymore, the bot was kicked, etc. The ids will be shown instead of the titles.
-        logger.debug(f'Failed to fetch the titles of the topics of {chat_id}:', exc_info=e)
-        return titles
+        logger.debug(f'Failed to enumerate the topics of {chat_id}:', exc_info=e)
+        return {}
 
+    if res.count > TOPIC_ENUMERATION_LIMIT:
+        logger.warning(f'Chat {chat_id} has {res.count} topics, only the first {TOPIC_ENUMERATION_LIMIT} '
+                       'can be matched by title')
+    ids_by_title: dict[str, int] = {}
     for topic in res.topics:
-        if isinstance(topic, ForumTopic):  # the deleted ones are `ForumTopicDeleted`, which have no title
-            titles[topic.id] = topic.title
-            TopicTitleCache[(chat_id, topic.id)] = topic.title
-    return titles
+        if isinstance(topic, ForumTopic) and not topic.short:
+            TopicCache[(chat_id, topic.id)] = topic
+            # The "General" topic (id 1) cannot be addressed explicitly, a sub of it is bound to the chat itself.
+            if topic.id > 1:
+                ids_by_title.setdefault(topic.title, topic.id)  # on a duplicate title, the first topic wins
+    return ids_by_title
 
 
 def parse_hashtags(text: str) -> list[str]:
@@ -446,6 +490,12 @@ async def activate_or_deactivate_all_subs(user_id: int, activate: bool) -> tuple
     :return: the updated sub, `None` if the sub does not exist
     """
     subs = await list_sub(user_id, state=0 if activate else 1)
+    if activate and (topic_ids := {sub.topic_id for sub in subs if sub.topic_id}):
+        # Leave the subs whose topic is gone deactivated, they would be deactivated again on the next post anyway.
+        existing_topics = await get_topics(user_id, topic_ids, use_cache=False)
+        subs = [sub for sub in subs if not sub.topic_id or sub.topic_id in existing_topics]
+        if not subs:
+            return ()
     tasks = []
     feeds_to_update = []
     for sub in subs:

@@ -22,7 +22,7 @@ from telethon import Button
 from . import inner, misc
 from .types import *
 from .utils import command_gatekeeper, parse_customization_callback_data, parse_callback_data_with_page, \
-    escape_html, parse_command_get_sub_or_user_and_param, get_callback_tail, get_topic_id
+    escape_html, parse_command_get_sub_or_user_and_param, get_callback_tail, get_topic_id, is_self_admin
 from .. import db, env
 from ..i18n import i18n
 
@@ -116,6 +116,9 @@ async def callback_set(
         elif action == 'length_limit' and (isinstance(param, int) or param == 'default'):
             await inner.customization.set_length_limit(sub_or_user, param if param != 'default' else -100)
         elif action == 'activate' and not set_user_default:
+            if sub_or_user.state != 1 and await topic_unavailable(chat_id, sub_or_user):
+                await event.answer('ERROR: ' + i18n[lang]['sub_topic_unavailable_prompt'], alert=True)
+                return
             await inner.customization.set_sub_activate(sub_or_user)
         elif (
                 action == 'display_media'
@@ -364,7 +367,11 @@ async def callback_activate_or_deactivate_sub(
     chat_id = chat_id or event.chat_id
     sub_id, page = parse_callback_data_with_page(event.data)
     sub_id = int(sub_id)
-    unsub_res = await inner.utils.activate_or_deactivate_sub(chat_id, sub_id, activate=activate)
+    sub_to_activate = await db.Sub.get_or_none(id=sub_id, user_id=chat_id) if activate else None
+    if sub_to_activate is not None and await topic_unavailable(chat_id, sub_to_activate):
+        await event.answer('ERROR: ' + i18n[lang]['sub_topic_unavailable_prompt'], alert=True)
+        return
+    unsub_res = await inner.utils.activate_or_deactivate_sub(chat_id, sub_to_activate or sub_id, activate=activate)
     if unsub_res is None:
         await event.answer('ERROR: ' + i18n[lang]['subscription_not_exist'], alert=True)
         return
@@ -467,6 +474,25 @@ async def cmd_set_interval(
         parse_mode='html',
         link_preview=False,
     )
+
+
+async def topic_unavailable(chat_id: int, sub: db.Sub) -> bool:
+    """
+    Tell whether the forum topic a sub is bound to can no longer be posted in, so that the sub is not activated
+    just to be deactivated again by the notifier.
+
+    A closed topic is still writable for an admin, thus it only counts as unavailable if the bot is not one.
+
+    :param chat_id: the id of the chat the sub belongs to
+    :param sub: the sub to check
+    :return: `True` if the topic is gone or unwritable, `False` otherwise (including a sub bound to no topic)
+    """
+    if not sub.topic_id:
+        return False
+    topic = (await inner.utils.get_topics(chat_id, (sub.topic_id,), use_cache=False)).get(sub.topic_id)
+    if topic is None:
+        return True  # deleted
+    return bool(topic.closed) and not await is_self_admin(chat_id)
 
 
 @command_gatekeeper(only_manager=False)

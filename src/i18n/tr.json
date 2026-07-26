@@ -132,6 +132,8 @@
         "set_custom_title_button": "Özel Başlık…",
         "set_custom_interval_button": "Özel aralık (dakika olarak)…",
         "set_custom_hashtags_button": "Özel hashtag'ler…",
+        "set_topic_button": "Bir konuya gönder…",
+        "sub_topic_unavailable_prompt": "Bu aboneliğin gönderildiği konu kapatılmış veya silinmiş. Aboneliği etkinleştirmeden önce konuyu yeniden açın veya başka bir konuda /set_topic komutunu kullanın.",
         "set_interval_prompt": "Lütfen bir izleme aralığı seçin.",
         "set_length_limit_prompt": "Lütfen bir uzunluk sınırı seçin.\n\nBir gönderi sınırdan uzunsa veya tek bir mesajda gönderilemiyorsa, Telegraph aracılığıyla gönderilir.\nTelegraph üzerinden gönderme başarısız olursa, yalnızca başlığı ve kaynağı gönderilir.",
         "length_limit_only_effective_if_send_mode_auto": "Uzunluk sınırı yalnızca gönderme modu otomatik olduğunda geçerlidir.",
