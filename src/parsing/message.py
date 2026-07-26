@@ -41,7 +41,8 @@ class MessageDispatcher:
                  html: Optional[str] = None,
                  media: Optional[Media] = None,
                  link_preview: bool = False,
-                 silent: bool = False):
+                 silent: bool = False,
+                 topic_id: Optional[int] = None):
         if not any((html, media)):
             raise ValueError('At least one of html or media must be specified')
         self.user_id = user_id
@@ -50,6 +51,7 @@ class MessageDispatcher:
         self.media = media
         self.link_preview = link_preview
         self.silent = silent
+        self.topic_id = topic_id
 
         self.messages: list[Message] = []
 
@@ -98,7 +100,9 @@ class MessageDispatcher:
         try:
             async with self.user_sending_lock[self.user_id]:
                 for message in self.messages:
-                    msg = await message.send(reply_to=sent_msgs[-1] if sent_msgs else None)
+                    # Replying to the message that created a topic is how a message is posted into that topic.
+                    # The following messages reply to the previous one, thus they stay in the topic as well.
+                    msg = await message.send(reply_to=sent_msgs[-1] if sent_msgs else self.topic_id)
                     if msg:
                         sent_msgs.extend(msg) if isinstance(msg, list) else sent_msgs.append(msg)
         except MediaSendFailErrors as e:

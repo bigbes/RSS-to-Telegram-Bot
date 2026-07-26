@@ -19,6 +19,7 @@ from typing import Sequence, MutableMapping, Union, Final, ClassVar, Optional, A
 
 import asyncio
 from collections import defaultdict, Counter
+from contextlib import suppress
 from telethon import hints
 from telethon.errors import BadRequestError
 from traceback import format_exc
@@ -27,7 +28,7 @@ from ._common import logger, TIMEOUT
 from ._stat import NotifierStat
 from .. import db, env, web
 from ..command import inner
-from ..command.utils import default_leave_chat_helper, escape_html
+from ..command.utils import default_leave_chat_helper, escape_html, TOPIC_UNAVAILABLE_ERRORS
 from ..compat import nullcontext
 from ..errors_collection import EntityNotFoundError, UserBlockedErrors
 from ..helpers.bg import bg
@@ -45,6 +46,7 @@ class Notifier:
     # it may cause memory leak, but they are too small that leaking thousands of that is still not a big deal!
     _on_blocked_lock_bucket: ClassVar[dict[int, asyncio.Lock]] = defaultdict(asyncio.Lock)
     _user_blocked_counter: ClassVar[Counter] = Counter()
+    _on_topic_unavailable_lock_bucket: ClassVar[dict[int, asyncio.Lock]] = defaultdict(asyncio.Lock)
 
     def __init__(
             self,
@@ -282,7 +284,8 @@ class Notifier:
                 )
             try:
                 if isinstance(post, str):
-                    await env.bot.send_message(user_id, post, parse_mode='html', silent=not sub.notify)
+                    await env.bot.send_message(user_id, post, parse_mode='html', silent=not sub.notify,
+                                               reply_to=sub.topic_id)
                     return None
                 await post.send_formatted_post_according_to_sub(sub)
                 if self._user_blocked_counter[user_id]:  # reset the counter if success
@@ -290,8 +293,8 @@ class Notifier:
             except UserBlockedErrors as e:
                 return await self._on_blocked(user_id=user_id, err_msg=type(e).__name__)
             except BadRequestError as e:
-                if e.message == 'TOPIC_CLOSED':
-                    return await self._on_blocked(user_id=user_id, err_msg=e.message)
+                if e.message in TOPIC_UNAVAILABLE_ERRORS:
+                    return await self._on_topic_unavailable(sub=sub, err_msg=e.message)
         except Exception as e:
             logger.error(f'Failed to send {post.link} (feed: {post.feed_link}, user: {sub.user_id}):', exc_info=e)
             try:
@@ -316,6 +319,30 @@ class Notifier:
                     'An sending error message cannot be sent, please check the logs.',
                 )
         return None
+
+    async def _on_topic_unavailable(self, sub: db.Sub, err_msg: str) -> None:
+        """
+        Deactivate a sub whose forum topic can no longer be posted in.
+
+        Unlike being blocked, this affects a single sub only: the rest of the chat is still reachable, so neither
+        the other subs nor the membership in the chat are touched.
+        """
+        async with self._on_topic_unavailable_lock_bucket[sub.id]:
+            if sub.state != 1:
+                return  # already deactivated while another entry of the same feed was being sent
+            logger.error(f'Sub deactivated ({err_msg}): {self._describe_subtask(sub)}')
+            await inner.utils.activate_or_deactivate_sub(sub.user_id, sub, activate=False)
+            user = await db.User.get_or_none(id=sub.user_id)
+            lang = user.lang if user else None
+            with suppress(*UserBlockedErrors, BadRequestError):  # the chat itself may be unreachable as well
+                await env.bot.send_message(
+                    sub.user_id,
+                    '\n'.join((
+                        f'<a href="{self._feed.link}">{escape_html(sub.title or self._feed.title)}</a>',
+                        i18n[lang]['sub_deactivated_topic_unavailable_warn'],
+                    )),
+                    parse_mode='html',
+                )
 
     async def _on_blocked(self, user_id: int, err_msg: str):
         on_blocked_lock = self._on_blocked_lock_bucket[user_id]

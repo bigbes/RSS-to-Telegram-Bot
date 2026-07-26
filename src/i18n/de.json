@@ -156,10 +156,12 @@
         "subscription_title": "Benutzerdefinierter Titel",
         "feed_url": "Feed-URL",
         "hashtags": "Hashtags",
+        "topic": "Thema",
         "default_emoji_header_description": "%s bedeutet, dass das Abonnement deine Standardeinstellungen verwendet. Du kannst diese mithilfe von /set_default ändern."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "Der Abfragevorgang ist 100 Mal hintereinander fehlgeschlagen. Dein Abonnement des RSS-Feeds wurde deaktiviert.\nUm es wieder zu aktivieren, verwende bitte den Befehl /activate_subs."
+        "feed_deactivated_warn": "Der Abfragevorgang ist 100 Mal hintereinander fehlgeschlagen. Dein Abonnement des RSS-Feeds wurde deaktiviert.\nUm es wieder zu aktivieren, verwende bitte den Befehl /activate_subs.",
+        "sub_deactivated_topic_unavailable_warn": "Das Thema, in das dieses Abonnement gesendet wurde, ist geschlossen oder gelöscht. Das Abonnement wurde deaktiviert.\nUm es wieder zu aktivieren, öffne bitte das Thema erneut und verwende den Befehl /activate_subs, oder abonniere den RSS-Feed erneut in einem anderen Thema."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "Die untenstehenden Abonnements sind deaktiviert. Wähle eines aus, um es zu aktivieren.\nNach der Aktivierung werden die Updates von diesem überwacht.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "Befehlsverwendung: <code>/set_title sub_id titel</code>\n\nNotiz: Lass <code>titel</code> weg, um den benutzerdefinierten Titel zu löschen (nur wenn zuvor festgelegt, andernfalls wird diese Meldung angezeigt).",
         "set_title_success": "Der benutzerdefinierte Titel des Abonnements wurde geändert zu: ",
         "set_title_success_cleared": "Der benutzerdefinierte Titel des Abonnements wurde gelöscht."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Befehlsverwendung: <code>/set_topic sub_id</code>\n\nNotiz: Sende den Befehl in dem Thema, in das das Abonnement gesendet werden soll. Sendest du ihn außerhalb eines Themas, wird das Abonnement in die Gruppe selbst gesendet. Da das Thema vom Ort des Befehls abgeleitet wird, kann er nicht zur Fernverwaltung eines anderen Chats verwendet werden.",
+        "set_topic_success": "Das Abonnement wird ab jetzt in dieses Thema gesendet.",
+        "set_topic_success_cleared": "Das Abonnement wird ab jetzt in die Gruppe selbst gesendet."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Befehlsverwendung: <code>/set_interval sub_id abfrageintervall</code>\n\nNotiz: <code>abfrageintervall</code> muss eine positive Ganzzahl in Minuten sein (die Einheit muss nicht angegeben werden).",

@@ -21,13 +21,13 @@ from telethon import Button
 from telethon.tl import types
 from telethon.tl.patched import Message
 
-from .. import env
+from .. import env, db
 from ..i18n import i18n
 from . import inner
 from .types import *
 from .utils import (
     command_gatekeeper, parse_command, escape_html, parse_callback_data_with_page,
-    send_success_and_failure_msg, get_callback_tail, check_sub_limit,
+    send_success_and_failure_msg, get_callback_tail, check_sub_limit, get_topic_id,
 )
 
 
@@ -82,7 +82,10 @@ async def cmd_sub(
 
     msg: Message = await event.respond(i18n[lang]['processing'])
 
-    sub_result = await inner.sub.subs(chat_id, filtered_urls, lang=lang)
+    # Subscribe in the topic the command was sent in, but only if the command targets the current chat.
+    topic_id = get_topic_id(event) if chat_id == event.chat_id else None
+
+    sub_result = await inner.sub.subs(chat_id, filtered_urls, lang=lang, topic_id=topic_id)
 
     if sub_result is None:
         await msg.edit(prompt, parse_mode='html')
@@ -184,10 +187,18 @@ async def cmd_list_or_callback_get_list_page(
         await event.respond(i18n[lang]['no_subscription'])
         return
 
+    topic_titles = await inner.utils.get_topic_titles(chat_id, (sub.topic_id for sub in page if sub.topic_id))
+
+    def describe_topic(sub: db.Sub) -> str:
+        if not sub.topic_id:
+            return ''
+        title = topic_titles.get(sub.topic_id) or f'#{sub.topic_id}'
+        return f' ({escape_html(title)})'
+
     list_result = ''.join((
         f'<b>{i18n[lang]["subscription_list"]}</b>\n',  # it occupies a parsing entity
         '\n'.join(
-            f'<a href="{sub.feed.link}">{escape_html(sub.title or sub.feed.title)}</a>'
+            f'<a href="{sub.feed.link}">{escape_html(sub.title or sub.feed.title)}</a>{describe_topic(sub)}'
             for sub in page
         )
     ))

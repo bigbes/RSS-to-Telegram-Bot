@@ -22,7 +22,7 @@ from telethon import Button
 from . import inner, misc
 from .types import *
 from .utils import command_gatekeeper, parse_customization_callback_data, parse_callback_data_with_page, \
-    escape_html, parse_command_get_sub_or_user_and_param, get_callback_tail
+    escape_html, parse_command_get_sub_or_user_and_param, get_callback_tail, get_topic_id
 from .. import db, env
 from ..i18n import i18n
 
@@ -464,6 +464,35 @@ async def cmd_set_interval(
             i18n[lang]['other_settings_button'],
             data=(f'set={sub_or_user.id}' if isinstance(sub_or_user, db.Sub) else 'set_default') + callback_tail
         ),),
+        parse_mode='html',
+        link_preview=False,
+    )
+
+
+@command_gatekeeper(only_manager=False)
+async def cmd_set_topic(
+        event: TypeEventMsgHint,
+        *_,
+        lang: Optional[str] = None,
+        chat_id: Optional[int] = None,
+        **__,
+):
+    chat_id = chat_id or event.chat_id
+    callback_tail = get_callback_tail(event, chat_id)
+    sub, _param = await parse_command_get_sub_or_user_and_param(event.raw_text, chat_id)
+    # The topic is taken from where the command was sent, so it cannot be used to manage another chat remotely.
+    if not sub or chat_id != event.chat_id:
+        await event.respond(i18n[lang]['cmd_set_topic_usage_prompt_html'], parse_mode='html')
+        return
+
+    topic_id = get_topic_id(event)
+    await inner.customization.set_sub_topic(sub, topic_id)
+    await event.respond(
+        '\n\n'.join((
+            i18n[lang]['set_topic_success'] if topic_id else i18n[lang]['set_topic_success_cleared'],
+            await inner.customization.get_sub_info(sub, lang=lang),
+        )),
+        buttons=(Button.inline(i18n[lang]['other_settings_button'], data=f'set={sub.id}{callback_tail}'),),
         parse_mode='html',
         link_preview=False,
     )

@@ -156,10 +156,12 @@
         "subscription_title": "",
         "feed_url": "",
         "hashtags": "",
+        "topic": "",
         "default_emoji_header_description": ""
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": ""
+        "feed_deactivated_warn": "",
+        "sub_deactivated_topic_unavailable_warn": ""
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "",
         "set_title_success": "",
         "set_title_success_cleared": ""
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "",
+        "set_topic_success": "",
+        "set_topic_success_cleared": ""
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "",

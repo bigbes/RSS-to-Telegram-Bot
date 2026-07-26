@@ -156,10 +156,12 @@
         "subscription_title": "Judul khusus",
         "feed_url": "URL feed",
         "hashtags": "Tagar",
+        "topic": "Topik",
         "default_emoji_header_description": "%s langganan menggunakan pengaturan default anda. Anda dapat mengubahnya dengan menggunakan /set_default."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "Pemantauan telah gagal 100 kali berturut-turut. Langganan Anda ke feed RSS ini telah dinonaktifkan.\nUntuk mengaktifkannya kembali, silakan gunakan perintah /activate_subs."
+        "feed_deactivated_warn": "Pemantauan telah gagal 100 kali berturut-turut. Langganan Anda ke feed RSS ini telah dinonaktifkan.\nUntuk mengaktifkannya kembali, silakan gunakan perintah /activate_subs.",
+        "sub_deactivated_topic_unavailable_warn": "Topik tujuan langganan ini telah ditutup atau dihapus. Langganan telah dinonaktifkan.\nUntuk mengaktifkannya kembali, silakan buka kembali topik tersebut dan gunakan perintah /activate_subs, atau berlangganan feed RSS ini lagi di topik lain."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "Langganan di bawah telah dinonaktifkan, pilih salah satu untuk mengaktifkan.\nSetelah diaktifkan, pembaruan langganan tersebut akan dipantau.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "Penggunaan perintah:  /set_title sub_id title \n\nCatatan: hilangkan  title  untuk menghapus judul khusus (hanya jika disetel sebelumnya, jika tidak, dapatkan perintah ini).",
         "set_title_success": "Judul khusus langganan telah diubah menjadi: ",
         "set_title_success_cleared": "Judul kustom langganan telah dihapus."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Penggunaan perintah: <code>/set_topic sub_id</code>\n\nCatatan: kirim perintah ini di dalam topik tujuan langganan. Jika dikirim di luar topik mana pun, langganan akan dikirim ke grup itu sendiri. Karena topik diambil dari tempat perintah dikirim, perintah ini tidak dapat digunakan untuk mengelola obrolan lain dari jarak jauh.",
+        "set_topic_success": "Mulai sekarang langganan akan dikirim ke topik ini.",
+        "set_topic_success_cleared": "Mulai sekarang langganan akan dikirim ke grup itu sendiri."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Penggunaan perintah:  /set_interval sub_id monitor_interval \n\nCatatan:  monitor_interval  harus berupa bilangan bulat positif dalam hitungan menit (tidak perlu menyertakan satuan).",

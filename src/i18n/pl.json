@@ -156,10 +156,12 @@
         "subscription_title": "Własny tytuł",
         "feed_url": "Adres URL kanału",
         "hashtags": "Hasztagi",
+        "topic": "Temat",
         "default_emoji_header_description": ""
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": ""
+        "feed_deactivated_warn": "",
+        "sub_deactivated_topic_unavailable_warn": "Temat, do którego wysyłana była ta subskrypcja, jest zamknięty lub usunięty. Subskrypcja została wyłączona.\nAby ją ponownie włączyć, otwórz temat i użyj polecenia /activate_subs lub zasubskrybuj kanał RSS ponownie w innym temacie."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "Poniższe subskrypcje są dezaktywowane, wybierz jedną, aby ją aktywować.\nPo aktywacji ich aktualizacje będą monitorowane.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "",
         "set_title_success": "Zmieniono niestandardowy tytuł subskrypcji na: ",
         "set_title_success_cleared": ""
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Użycie polecenia: <code>/set_topic sub_id</code>\n\nUwaga: wyślij polecenie w temacie, do którego ma trafiać subskrypcja. Wysłanie go poza tematami sprawi, że subskrypcja będzie wysyłana do samej grupy. Ponieważ temat jest ustalany na podstawie miejsca wysłania polecenia, nie można go użyć do zdalnego zarządzania innym czatem.",
+        "set_topic_success": "Od teraz subskrypcja będzie wysyłana do tego tematu.",
+        "set_topic_success_cleared": "Od teraz subskrypcja będzie wysyłana do samej grupy."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "",

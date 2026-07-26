@@ -25,7 +25,7 @@ from telethon.tl.types import KeyboardButtonCallback
 from ... import db, env
 from ...i18n import i18n
 from .utils import arrange_grid, update_interval, activate_or_deactivate_sub, formatting_time, logger, \
-    construct_hashtags
+    construct_hashtags, get_topic_titles, escape_html
 from ...parsing.utils import escape_hashtags
 
 SUB_OPTIONS_EXHAUSTIVE_VALUES = {
@@ -52,14 +52,21 @@ async def get_sub_info(sub: db.Sub,
                        additional_guide: bool = False) -> str:
     if not isinstance(sub.feed, db.Feed):
         await sub.fetch_related('feed')
+    topic = (
+        (await get_topic_titles(sub.user_id, (sub.topic_id,))).get(sub.topic_id) or f'#{sub.topic_id}'
+        if sub.topic_id
+        else None
+    )
     return (
             f"<b>{i18n[lang]['subscription_info']}</b>\n\n"
             f"{i18n[lang]['feed_title']}: {sub.feed.title}\n"
             f"{i18n[lang]['feed_url']}: {sub.feed.link}"
-            + ('\n\n' if sub.title or sub.tags else '')
+            + ('\n\n' if sub.title or sub.tags or topic else '')
             + (f"{i18n[lang]['subscription_title']}: {sub.title}" if sub.title else '')
-            + ('\n' if sub.title and sub.tags else '')
+            + ('\n' if sub.title and (sub.tags or topic) else '')
             + (f"{i18n[lang]['hashtags']}: {construct_hashtags(sub.tags)}" if sub.tags else '')
+            + ('\n' if sub.tags and topic else '')
+            + (f"{i18n[lang]['topic']}: {escape_html(topic)}" if topic else '')
             + (f"\n\n{i18n[lang]['default_emoji_header_description'] % (FALLBACK_TO_USER_DEFAULT_EMOJI,)}"
                if additional_guide else '')
             + (f"\n\n{i18n[lang]['read_formatting_settings_guidebook_html']}"
@@ -476,6 +483,15 @@ async def set_sub_title(sub: db.Sub, title: Optional[str]) -> db.Sub:
     sub.title = title
     await sub.save()
     logger.info(f'Subscription {sub.id} of {sub.user_id} title changed to {title}')
+    return sub
+
+
+async def set_sub_topic(sub: db.Sub, topic_id: Optional[int]) -> db.Sub:
+    if sub.topic_id == topic_id:
+        return sub
+    sub.topic_id = topic_id
+    await sub.save()
+    logger.info(f'Subscription {sub.id} of {sub.user_id} moved to topic {topic_id}')
     return sub
 
 

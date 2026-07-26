@@ -155,10 +155,12 @@
         "subscription_title": "عنوان مخصص",
         "feed_url": "عنوان URL للتغذية",
         "hashtags": "وسوم",
+        "topic": "الموضوع",
         "default_emoji_header_description": "%s يعني أن الاشتراك يستخدم إعداداتك الافتراضية. يمكنك تغييرها باستخدام /set_default."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "فشلت مهمة المراقبة 100 مرة متتالية. تم إلغاء تنشيط اشتراكك في RSS feed.\nلإعادة تنشيطه ، يرجى استخدام امر /activate_subs."
+        "feed_deactivated_warn": "فشلت مهمة المراقبة 100 مرة متتالية. تم إلغاء تنشيط اشتراكك في RSS feed.\nلإعادة تنشيطه ، يرجى استخدام امر /activate_subs.",
+        "sub_deactivated_topic_unavailable_warn": "الموضوع الذي كان يُرسل إليه هذا الاشتراك مغلق أو محذوف. تم إلغاء تنشيط الاشتراك.\nلإعادة تنشيطه، يرجى إعادة فتح الموضوع واستخدام امر /activate_subs، أو الاشتراك في RSS feed مرة أخرى في موضوع آخر."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "الإشتراكات أدناه غير نشطة ، اختر واحده لتنشيطها.\nبعد التفعيل ، ستتم مراقبة تحديثاتهم.",
@@ -174,6 +176,11 @@
         "cmd_set_title_usage_prompt_html": "استخدام الأمر: <code>/set_title sub_id عنوان</code>\n\nملاحظة: احذف <code>title</code> لمسح العنوان المخصص (فقط إذا تم تعيينه مسبقًا ، أو احصل على هذه المطالبة).",
         "set_title_success": "تم تغيير العنوان المخصص للاشتراك إلى: ",
         "set_title_success_cleared": "تم مسح العنوان المخصص للاشتراك."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "استخدام الأمر: <code>/set_topic sub_id</code>\n\nملاحظة: أرسل الأمر داخل الموضوع الذي تريد إرسال الاشتراك إليه. إرساله خارج أي موضوع يجعل الاشتراك يُرسل إلى المجموعة نفسها. وبما أن الموضوع يُؤخذ من مكان إرسال الأمر، لا يمكن استخدامه لإدارة دردشة أخرى عن بُعد.",
+        "set_topic_success": "سيتم إرسال الاشتراك إلى هذا الموضوع من الآن فصاعدًا.",
+        "set_topic_success_cleared": "سيتم إرسال الاشتراك إلى المجموعة نفسها من الآن فصاعدًا."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "استخدام الأمر: <code>/set_interval sub_id monitor_interval</code>\n\nملاحظة: <code>monitor_interval</code> يجب أن يكون عددًا صحيحًا موجبًا بالدقائق (لا داعي لتضمين الوحدة).",

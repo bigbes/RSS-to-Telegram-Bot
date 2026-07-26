@@ -155,10 +155,12 @@
         "subscription_title": "عنوان سفارشی",
         "feed_url": "لینک feed",
         "hashtags": "هشتگ",
+        "topic": "موضوع",
         "default_emoji_header_description": "این اشتراک %s درحال استفاده از تنظیمات اولیه و پیشفرض میباشد. شما میتواندی آنها را با استفاده از دستور /set_default تغییر دهید."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "الان 100 بار بصورت متوالی ، بررسی این فید با شکست مواجه شده است. از این رو ، اشتراک شما در این فید RSS غیرفعال شده است.\nبرای فعال سازی مجدد آن ، لطفا از دستور مقابل /activate_subs استفاده نمایید."
+        "feed_deactivated_warn": "الان 100 بار بصورت متوالی ، بررسی این فید با شکست مواجه شده است. از این رو ، اشتراک شما در این فید RSS غیرفعال شده است.\nبرای فعال سازی مجدد آن ، لطفا از دستور مقابل /activate_subs استفاده نمایید.",
+        "sub_deactivated_topic_unavailable_warn": "موضوعی که این اشتراک به آن ارسال می‌شد بسته یا حذف شده است. این اشتراک غیرفعال شد.\nبرای فعال‌سازی مجدد آن، لطفاً موضوع را دوباره باز کنید و از دستور /activate_subs استفاده نمایید، یا در موضوعی دیگر دوباره در این فید RSS مشترک شوید."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "اشتراکهای پایی غیرفعال شده اند ، برای فعال سازی یکی از آنها ، انتخاب کنید.\nبعد از فعال شدن ، شروع به مانیتور کردن آن فید rss خواهم کرد.",
@@ -174,6 +176,11 @@
         "cmd_set_title_usage_prompt_html": "طرز استفاده از دستور : <code>/set_title sub_id title</code>\n\nNote: omit <code>title</code> to clear custom title (only if previously set, otherwise get this prompt).",
         "set_title_success": "عنوان سفارشی شما تغییر کرد به : ",
         "set_title_success_cleared": "عنوان سفارشی این اشتراک پاک شد."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "طرز استفاده از دستور: <code>/set_topic sub_id</code>\n\nنکته: این دستور را داخل موضوعی بفرستید که می‌خواهید اشتراک به آن ارسال شود. اگر آن را بیرون از موضوع‌ها بفرستید، اشتراک به خود گروه ارسال می‌شود. از آنجا که موضوع از محل ارسال دستور گرفته می‌شود، نمی‌توان با آن گفتگوی دیگری را از راه دور مدیریت کرد.",
+        "set_topic_success": "از این پس اشتراک به این موضوع ارسال خواهد شد.",
+        "set_topic_success_cleared": "از این پس اشتراک به خود گروه ارسال خواهد شد."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "طرز استفاده از دستور : <code>/set_interval sub_id monitor_interval</code>\n\nNote: <code>monitor_interval</code> must be a positive integer in minutes (no need to include the unit).",

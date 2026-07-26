@@ -41,7 +41,17 @@ If you want to allow a certain channel/group to use the bot, you should promote 
 **A**: Once the bot finds itself lacking the permission to send messages (not granted or being blocked), it will immediately unsubscribe all subscriptions in this chat. Meanwhile, if this chat is a channel or group and the bot is still a member of it, it will leave the channel/group.
 Make sure to grant the bot enough permission (sending messages) in channel/group.
 
-A special case is that the bot will leave a topic group if the "General" topic is closed. This is a temporary limitation before topic groups are fully supported.
+A special case is a topic group: if the topic a subscription sends to is closed or deleted, only that subscription is deactivated, and a warning is sent to the group. The bot stays in the group and keeps the other subscriptions running. Reopen the topic and use /activate_subs to resume it.
+
+### **Q**: How do I send a feed to a specific topic of a topic group?
+
+**A**: Send /sub inside the topic you want the feed to go to. The subscription remembers that topic and every post of it will be sent there. /import works the same way: the subscriptions it creates are bound to the topic the OPML file was sent to.
+
+To move an existing subscription, send `/set_topic sub_id` inside the topic it should be sent to, or send /sub with the same URL there. Sending `/set_topic sub_id` outside any topic (in the "General" topic, for one) makes the subscription be sent to the group itself again. Each subscription is bound to at most one topic.
+
+/list marks each subscription with the topic it is sent to, and the same is shown in the subscription info of /set.
+
+Subscriptions made in the "General" topic (or in a group before topics were enabled) are not bound to any topic, and their posts are sent to the group itself.
 
 ### **Q**: My bot is not responding. I checked the log and saw Telethon complaining "Server sent a very new message with ID...", "Server replied with a wrong session ID...", or "Could not find a matching Constructor ID for the TLObject...".
 

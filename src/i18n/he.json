@@ -156,10 +156,12 @@
         "subscription_title": "כותרת מותאמת אישית",
         "feed_url": "קישור הפיד",
         "hashtags": "האשטגים",
+        "topic": "נושא",
         "default_emoji_header_description": "%s אומר שהמינוי משתמש בהגדרות ברירת המחדל שלך. אתה יכול לשנות אותם באמצעות /set_default."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "משימת הניטור נכשלה 100 פעמים רצופות. המנוי שלך לעדכון RSS הושבת.\n כדי להפעיל אותו מחדש, אנא השתמש בפקודה /activate_subs."
+        "feed_deactivated_warn": "משימת הניטור נכשלה 100 פעמים רצופות. המנוי שלך לעדכון RSS הושבת.\n כדי להפעיל אותו מחדש, אנא השתמש בפקודה /activate_subs.",
+        "sub_deactivated_topic_unavailable_warn": "הנושא שאליו נשלח המנוי הזה סגור או נמחק. המנוי הושבת.\nכדי להפעיל אותו מחדש, אנא פתח מחדש את הנושא והשתמש בפקודה /activate_subs, או הירשם שוב לעדכון ה-RSS בנושא אחר."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "המנויים למטה מושבתים, בחר אחד להפעלה.\n לאחר ההפעלה, העדכונים שלהם יהיו במעקב.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "שימוש בפקודה: <code>/set_title sub_id title</code>\n\nהערה: השמט את <code>title</code> כדי לנקות כותרת מותאמת אישית (רק אם הוגדרה קודם לכן, אחרת קבל הודעה זו).",
         "set_title_success": "הכותרת המותאמת אישית של המנוי שונתה ל:",
         "set_title_success_cleared": "הכותרת המותאמת אישית של המנוי נמחקה."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "שימוש בפקודה: <code>/set_topic sub_id</code>\n\nהערה: שלח את הפקודה בתוך הנושא שאליו תרצה שהמנוי יישלח. שליחתה מחוץ לכל נושא תגרום למנוי להישלח לקבוצה עצמה. מכיוון שהנושא נקבע לפי המקום שממנו נשלחת הפקודה, לא ניתן להשתמש בה כדי לנהל צ'אט אחר מרחוק.",
+        "set_topic_success": "מעתה המנוי יישלח לנושא הזה.",
+        "set_topic_success_cleared": "מעתה המנוי יישלח לקבוצה עצמה."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "שימוש בפקודה: <code>/set_interval sub_id monitor_interval</code>\n\nהערה: <code>monitor_interval</code> חייב להיות מספר שלם חיובי בדקות (אין צורך לכלול את היחידה).",

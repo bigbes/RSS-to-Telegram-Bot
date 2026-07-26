@@ -156,10 +156,12 @@
         "subscription_title": "カスタムタイトル",
         "feed_url": "フィード URL",
         "hashtags": "ハッシュタグ",
+        "topic": "トピック",
         "default_emoji_header_description": "%s は、購読がデフォルト設定を使用していることを意味します。 /set_default で変更できます。"
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "監視タスクが 100 回連続で失敗しました。この RSS フィードの購読が無効になりました。\n再度有効にするは、/activate_subs コマンドを使用してください。"
+        "feed_deactivated_warn": "監視タスクが 100 回連続で失敗しました。この RSS フィードの購読が無効になりました。\n再度有効にするは、/activate_subs コマンドを使用してください。",
+        "sub_deactivated_topic_unavailable_warn": "この購読の送信先のトピックが閉鎖または削除されました。購読が無効になりました。\n再度有効にするには、トピックを開き直して /activate_subs コマンドを使用するか、別のトピックでこの RSS フィードを再度購読してください。"
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "以下の購読が無効になっています。有効にする購読を一つ選択してください。\n有効にされ後、それらの更新が監視されます。",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "コマンドの使用法: <code>/set_title 購読ID タイトル</code>\n\n注: カスタムタイトルをクリアするには、<code>タイトル</code> を省略します (以前に設定した場合のみクリアされます)。",
         "set_title_success": "購読のカスタムタイトルが次のように変更されました: ",
         "set_title_success_cleared": "購読のカスタムタイトルがクリアされました。"
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "コマンドの使用法: <code>/set_topic 購読ID</code>\n\n注: 購読の送信先にしたいトピック内でコマンドを送信してください。トピック外で送信すると、購読はグループ自体に送信されます。トピックはコマンドの送信場所から判断されるため、他のチャットをリモートで管理する用途には使用できません。",
+        "set_topic_success": "今後、この購読はこのトピックに送信されます。",
+        "set_topic_success_cleared": "今後、この購読はグループ自体に送信されます。"
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "コマンドの使用法: <code>/set_interval 購読ID 監視間隔</code>\n\n注: <code>監視間隔</code> は分単位の正の整数でなければなりません (単位は含まず)。",

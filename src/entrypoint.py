@@ -185,6 +185,9 @@ async def pre():
     bot.add_event_handler(command.customization.cmd_set_hashtags,
                           events.NewMessage(
                               pattern=inline_query_matcher + construct_remote_command_matcher('/set_hashtags')))
+    bot.add_event_handler(command.customization.cmd_set_topic,
+                          events.NewMessage(
+                              pattern=inline_query_matcher + construct_command_matcher('/set_topic')))
 
     callback_target_matcher = r'(%(?P<target>\+?\d+))?'
     # callback query handler

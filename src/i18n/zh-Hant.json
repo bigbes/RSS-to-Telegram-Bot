@@ -156,10 +156,12 @@
         "subscription_title": "自訂標題",
         "feed_url": "源 URL",
         "hashtags": "Hashtag",
+        "topic": "話題",
         "default_emoji_header_description": "%s 意味著訂閱正使用預設的設定。您可以使用 /set_default 來改變它們。"
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "監視任務連續 100 次失敗。您對該 RSS 源的訂閱已停用。\n要重新啟動它，請使用 /activate_subs 指令。"
+        "feed_deactivated_warn": "監視任務連續 100 次失敗。您對該 RSS 源的訂閱已停用。\n要重新啟動它，請使用 /activate_subs 指令。",
+        "sub_deactivated_topic_unavailable_warn": "該訂閱發送到的話題已關閉或刪除，此訂閱已停用。\n要重新啟用，請重新開啟該話題並使用 /activate_subs 指令，或在另一個話題中重新訂閱該 RSS 源。"
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "以下訂閱已停用，請選擇要啟動的訂閱。\n啟動後，將監視其更新。",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "指令用法: <code>/set_title 訂閱編號 標題</code>\n\n註: 省略 <code>標題</code> 以清除自訂標題 (僅當先前設定過才能清除，否則就會收到此提示)。",
         "set_title_success": "訂閱的自訂標題已修改為: ",
         "set_title_success_cleared": "訂閱的自訂標題已清除。"
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "指令用法: <code>/set_topic 訂閱編號</code>\n\n註: 請在希望該訂閱發送到的話題內發送此指令。在話題之外發送，則該訂閱將發送到群組本身。由於話題取自指令的發送位置，因此該指令無法用於遠端管理其他對話。",
+        "set_topic_success": "此後該訂閱將發送到此話題。",
+        "set_topic_success_cleared": "此後該訂閱將發送到群組本身。"
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "指令用法: <code>/set_interval 訂閱編號 監視間隔</code>\n\n註: <code>監視間隔</code> 必須是正整數，單位為分鐘 (無需包含單位)。",

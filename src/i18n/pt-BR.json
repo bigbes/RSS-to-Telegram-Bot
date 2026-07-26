@@ -156,10 +156,12 @@
         "subscription_title": "Título personalizado",
         "feed_url": "URL de feed",
         "hashtags": "Hashtags",
+        "topic": "Tópico",
         "default_emoji_header_description": "%s significa que a assinatura está usando suas configurações padrão. Você pode alterá-los usando /set_default."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "A tarefa de monitoramento falhou 100 vezes consecutivas. Sua assinatura foi desativada.\nPara reativá-lo, use o comando /activate_subs."
+        "feed_deactivated_warn": "A tarefa de monitoramento falhou 100 vezes consecutivas. Sua assinatura foi desativada.\nPara reativá-lo, use o comando /activate_subs.",
+        "sub_deactivated_topic_unavailable_warn": "O tópico para o qual esta assinatura era enviada está fechado ou foi excluído. A assinatura foi desativada.\nPara reativá-la, reabra o tópico e use o comando /activate_subs, ou assine o feed RSS novamente em outro tópico."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "As assinaturas abaixo estão desativadas, escolha uma para ativar.\nApós serem ativados, suas atualizações serão monitoradas.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "Uso do comando: <code>/set_title sub_id título</code>\n\nNota: omitir <code>título</code> para limpar o título personalizado (somente se previamente definido, caso contrário obtenha este prompt).",
         "set_title_success": "O título personalizado da assinatura foi alterado para: ",
         "set_title_success_cleared": "O título personalizado da assinatura foi apagado."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Uso do comando: <code>/set_topic sub_id</code>\n\nNota: envie o comando dentro do tópico para o qual a assinatura deve ser enviada. Se enviá-lo fora de qualquer tópico, a assinatura será enviada ao próprio grupo. Como o tópico é determinado pelo local de onde o comando é enviado, ele não pode ser usado para gerenciar outra conversa remotamente.",
+        "set_topic_success": "A partir de agora, a assinatura será enviada para este tópico.",
+        "set_topic_success_cleared": "A partir de agora, a assinatura será enviada para o próprio grupo."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Uso do comando: <code>/set_interval sub_id monitor_interval</code>\n\nNota: <code>monitor_interval</code> deve ser um número inteiro positivo em minutos (não é necessário incluir a unidade).",

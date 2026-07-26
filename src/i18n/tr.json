@@ -156,10 +156,12 @@
         "subscription_title": "Özel başlık",
         "feed_url": "Besleme URL'si",
         "hashtags": "Hashtag'ler",
+        "topic": "Konu",
         "default_emoji_header_description": "%s aboneliğin varsayılan ayarlarınızı kullandığı anlamına gelir. /set_default kullanarak bunları değiştirebilirsiniz."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "İzleme görevi arka arkaya 100 kez başarısız olmuştu. RSS beslemesine aboneliğiniz devre dışı bırakıldı.\nYeniden etkinleştirmek için lütfen /activate_subs komutunu kullanın."
+        "feed_deactivated_warn": "İzleme görevi arka arkaya 100 kez başarısız olmuştu. RSS beslemesine aboneliğiniz devre dışı bırakıldı.\nYeniden etkinleştirmek için lütfen /activate_subs komutunu kullanın.",
+        "sub_deactivated_topic_unavailable_warn": "Bu aboneliğin gönderildiği konu kapatılmış veya silinmiş. Abonelik devre dışı bırakıldı.\nYeniden etkinleştirmek için lütfen konuyu yeniden açıp /activate_subs komutunu kullanın veya RSS beslemesine başka bir konuda yeniden abone olun."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "Aşağıdaki abonelikler devre dışı bırakıldı, etkinleştirmek için birini seçin.\nEtkinleştirildikten sonra güncellemeleri izlenecektir.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "Komut kullanımı: <code>/set_title sub_id başlık</code>\n\nNot: Özel başlığı temizlemek için <code>title</code> komut başlığını kullanın (yalnızca önceden ayarlanmışsa, aksi takdirde bu mesajı dikkate alın).",
         "set_title_success": "Aboneliğin özel başlığı şu şekilde değiştirildi: ",
         "set_title_success_cleared": "Aboneliğin özel başlığı temizlendi."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Komut kullanımı: <code>/set_topic sub_id</code>\n\nNot: komutu, aboneliğin gönderilmesini istediğiniz konunun içinde gönderin. Herhangi bir konunun dışında gönderirseniz abonelik grubun kendisine gönderilir. Konu, komutun gönderildiği yerden alındığı için başka bir sohbeti uzaktan yönetmek amacıyla kullanılamaz.",
+        "set_topic_success": "Abonelik bundan sonra bu konuya gönderilecek.",
+        "set_topic_success_cleared": "Abonelik bundan sonra grubun kendisine gönderilecek."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Komut kullanımı: <code>/set_interval sub_id monitor_interval</code>\n\nNot: <code>monitor_interval</code> dakikalar pozitif bir tamsayı olmalıdır (birimi dahil etmenize gerek yoktur).",

@@ -43,9 +43,10 @@ with open(path.normpath(path.join(path.dirname(__file__), '../..', 'opml_templat
 async def sub(user_id: int,
               feed_url: Union[str, tuple[str, str]],
               lang: Optional[str] = None,
+              topic_id: Optional[int] = None,
               bypass_feed_sniff: bool = False) -> dict[str, Union[int, str, db.Sub, None]]:
     if not bypass_feed_sniff and feed_url in FeedSnifferCache and FeedSnifferCache[feed_url]:
-        return await sub(user_id, FeedSnifferCache[feed_url], lang=lang, bypass_feed_sniff=True)
+        return await sub(user_id, FeedSnifferCache[feed_url], lang=lang, topic_id=topic_id, bypass_feed_sniff=True)
 
     ret = {'url': feed_url,
            'sub': None,
@@ -76,7 +77,8 @@ async def sub(user_id: int,
                 if not bypass_feed_sniff and wf.status == 200 and wf.content:
                     sniffed_feed_url = await feed_sniffer(feed_url, wf.content)
                     if sniffed_feed_url:
-                        sniff_ret = await sub(user_id, sniffed_feed_url, lang=lang, bypass_feed_sniff=True)
+                        sniff_ret = await sub(user_id, sniffed_feed_url, lang=lang, topic_id=topic_id,
+                                              bypass_feed_sniff=True)
                         if sniff_ret['sub']:
                             return sniff_ret
                         FeedSnifferCache[feed_url] = None
@@ -115,6 +117,7 @@ async def sub(user_id: int,
                 user_id=user_id, feed=feed,
                 defaults={
                     'title': sub_title if sub_title else None,
+                    'topic_id': topic_id,
                     'interval': None,
                     'notify': -100,
                     'send_mode': -100,
@@ -130,19 +133,22 @@ async def sub(user_id: int,
             )
 
         if not created_new_sub:
-            if _sub.title == sub_title and _sub.state == 1:
+            if _sub.title == sub_title and _sub.topic_id == topic_id and _sub.state == 1:
                 ret['sub'] = None
                 ret['msg'] = 'ERROR: ' + i18n[lang]['already_subscribed']
                 return ret
 
-            if _sub.title != sub_title:
-                _sub.state = 1
-                _sub.title = sub_title
-                await _sub.save()
+            title_updated = _sub.title != sub_title
+            topic_updated = _sub.topic_id != topic_id
+            _sub.state = 1
+            _sub.title = sub_title
+            _sub.topic_id = topic_id
+            await _sub.save()
+            if title_updated:
                 logger.info(f'Sub {feed_url} for {user_id} updated title to {sub_title}')
-            else:
-                _sub.state = 1
-                await _sub.save()
+            if topic_updated:
+                logger.info(f'Sub {feed_url} for {user_id} moved to topic {topic_id}')
+            if not (title_updated or topic_updated):
                 logger.info(f'Sub {feed_url} for {user_id} activated')
 
         _sub.feed = feed  # by doing this we don't need to fetch_related
@@ -162,7 +168,8 @@ async def sub(user_id: int,
 
 async def subs(user_id: int,
                feed_urls: Sequence[Union[str, tuple[str, str]]],
-               lang: Optional[str] = None) \
+               lang: Optional[str] = None,
+               topic_id: Optional[int] = None) \
         -> Optional[dict[str, Union[tuple[dict[str, Union[int, str, db.Sub, None]], ...], str, int]]]:
     if not feed_urls:
         return None
@@ -179,7 +186,9 @@ async def subs(user_id: int,
         remaining_feed_urls = feed_urls
         failure = []
 
-    result = await asyncio.gather(*(sub(user_id, url, lang=lang) for url in remaining_feed_urls))
+    result = await asyncio.gather(
+        *(sub(user_id, url, lang=lang, topic_id=topic_id) for url in remaining_feed_urls)
+    )
 
     success = tuple(sub_d for sub_d in result if sub_d['sub'])
     failure.extend(sub_d for sub_d in result if not sub_d['sub'])

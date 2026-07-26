@@ -156,10 +156,12 @@
         "subscription_title": "自定义标题",
         "feed_url": "源 URL",
         "hashtags": "Hashtag",
+        "topic": "话题",
         "default_emoji_header_description": "%s 意味着订阅正使用你的默认设置。你可以使用 /set_default 来修改它们。"
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "检查任务已经连续失败 100 次，对该 RSS 源的订阅已被停用。\n若要重新启用，请使用 /activate_subs 命令。"
+        "feed_deactivated_warn": "检查任务已经连续失败 100 次，对该 RSS 源的订阅已被停用。\n若要重新启用，请使用 /activate_subs 命令。",
+        "sub_deactivated_topic_unavailable_warn": "该订阅发送到的话题已关闭或删除，此订阅已被停用。\n若要重新启用，请重新打开该话题并使用 /activate_subs 命令，或在另一个话题中重新订阅该 RSS 源。"
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "以下订阅处于停用状态，请选择你需要启用的订阅。\n启用后，会监控订阅更新。",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "命令用法: <code>/set_title 订阅编号 标题</code>\n\n注: 省略 <code>标题</code> 以清除自定义标题 (只有以前设置过才可以清除，否则会收到此提示)。",
         "set_title_success": "订阅的自定义标题已更改为: ",
         "set_title_success_cleared": "订阅的自定义标题已清除。"
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "命令用法: <code>/set_topic 订阅编号</code>\n\n注: 请在希望该订阅发送到的话题内发送此命令。在话题之外发送，则该订阅将发送到群组本身。由于话题取自命令的发送位置，因此该命令无法用于远程管理其他对话。",
+        "set_topic_success": "此后该订阅将发送到此话题。",
+        "set_topic_success_cleared": "此后该订阅将发送到群组本身。"
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "命令用法: <code>/set_interval 订阅编号 监视间隔</code>\n\n注: <code>监视间隔</code> 必须是以分钟为单位的正整数 (不包含单位)。",

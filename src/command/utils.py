@@ -47,6 +47,9 @@ logger = log.getLogger('RSStT.command')
 splitByWhitespace = re.compile(r'\s+').split
 stripInlineHeader = partial(re.compile(r'^@\w{4,}\s+').sub, '')
 
+# `BadRequestError.message` of the errors telling that a forum topic can no longer be posted in
+TOPIC_UNAVAILABLE_ERRORS: Final[frozenset[str]] = frozenset({'TOPIC_CLOSED', 'TOPIC_DELETED'})
+
 
 # ANONYMOUS_ADMIN = 1087968824  # no need for MTProto, user_id will be `None` for anonymous admins
 
@@ -182,6 +185,64 @@ async def respond_or_answer(
                 else None
             ),
         )
+
+
+def get_topic_id(event: TypeEventCollectionAll) -> Optional[int]:
+    """
+    Get the id of the forum topic the event occurred in.
+
+    The id of a topic is the id of the message that created it, thus the "General" topic, which is not created by
+    any message, has no usable id and is treated as if the chat were not a topic group at all.
+
+    :param event: a telethon Event object
+    :return: the topic id, `None` if not in a topic group or in the "General" topic
+    """
+    # `NewMessage.Event` forwards the attribute to its message, a bare `Message` holds it itself, and any other
+    # event (a callback query, for one) has no such attribute at all.
+    reply_to: Optional[types.MessageReplyHeader] = getattr(event, 'reply_to', None)
+    if not isinstance(reply_to, types.MessageReplyHeader) or not reply_to.forum_topic:
+        return None
+    # If the message replies to another message inside the topic, the topic id is in `reply_to_top_id`.
+    # If it replies to the message that created the topic (or to nothing at all, in which case Telegram makes it
+    # reply to the topic-creating message), the topic id is in `reply_to_msg_id`.
+    topic_id = reply_to.reply_to_top_id or reply_to.reply_to_msg_id
+    # Id 1 stands for the "General" topic, which cannot be addressed explicitly. Send to the chat itself instead.
+    return topic_id if topic_id and topic_id > 1 else None
+
+
+async def bind_responses_to_topic(event: TypeEventCollectionAll) -> None:
+    """
+    Make `event.respond()` stay in the forum topic the event occurred in.
+
+    Telethon responds to the chat itself, which makes the response land in the "General" topic no matter which
+    topic the command was used in. Replying to the message that triggered the command keeps the response in the
+    right topic, just like responses are already anchored to the command in ordinary groups.
+
+    :param event: a telethon Event object
+    """
+    if getattr(event, 'is_private', True):  # `InlineQuery.Event` has no such attribute, it can only answer anyway
+        return
+
+    if isinstance(event, TypeEventCb):
+        # Which topic a callback query belongs to cannot be told without fetching its message, so anchor the
+        # responses of any forum chat. In the "General" topic, it merely makes a response an ordinary reply.
+        chat = await event.get_chat()
+        if not (isinstance(chat, types.Channel) and chat.forum):
+            return
+        anchor_msg_id = event.query.msg_id
+    else:
+        if get_topic_id(event) is None:
+            return
+        anchor_msg_id = event.id
+
+    respond = event.respond
+
+    async def respond_in_topic(*args, **kwargs):
+        if kwargs.get('reply_to') is None:  # respect an explicitly requested anchor
+            kwargs['reply_to'] = anchor_msg_id
+        return await respond(*args, **kwargs)
+
+    event.respond = respond_in_topic
 
 
 async def is_self_admin(chat_id: hints.EntityLike) -> Optional[bool]:
@@ -374,6 +435,7 @@ def command_gatekeeper(
                 pending_callbacks.add(callback_msg_id)
             try:
                 logger.log(log_level, f'Allow {describe_user()} to use {command}')
+                await bind_responses_to_topic(event)
                 async with locks.ContextWithTimeout(flood_lock, timeout=timeout):
                     pass  # wait for flood wait
                 await asyncio.wait_for(
@@ -671,8 +733,10 @@ def command_gatekeeper(
                     await respond_or_answer(event, 'ERROR: ' + i18n[lang]['message_too_long_prompt'])
                 elif isinstance(e, errors_collection.UserBlockedErrors):
                     await default_leave_chat_helper(chat_id)
-                elif isinstance(e, BadRequestError) and e.message == 'TOPIC_CLOSED':
-                    await default_leave_chat_helper(chat_id)
+                elif isinstance(e, BadRequestError) and e.message in TOPIC_UNAVAILABLE_ERRORS:
+                    # The topic is closed or deleted, so we cannot reply in it. The rest of the chat is still
+                    # usable, thus neither leaving the chat nor deactivating any sub is justified here.
+                    logger.warning(f'Cannot reply to {describe_user()} in the topic ({e.message})')
                 else:
                     await respond_or_answer(event, 'ERROR: ' + i18n[lang]['uncaught_internal_error'])
             except (FloodError, MessageNotModifiedError, locks.ContextTimeoutError):

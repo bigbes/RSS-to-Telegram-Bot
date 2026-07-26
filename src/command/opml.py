@@ -30,7 +30,9 @@ from ..aio_helper import run_async
 from ..i18n import i18n
 from . import inner
 from .types import *
-from .utils import command_gatekeeper, logger, send_success_and_failure_msg, get_callback_tail, check_sub_limit
+from .utils import (
+    command_gatekeeper, logger, send_success_and_failure_msg, get_callback_tail, check_sub_limit, get_topic_id,
+)
 
 
 @command_gatekeeper(only_manager=False)
@@ -139,7 +141,9 @@ async def opml_import(
                 else feed.url
             ) for feed in opml_d.feeds
         ),
-        lang=lang
+        lang=lang,
+        # Import into the topic the opml file was sent to, but only if the command targets the current chat.
+        topic_id=get_topic_id(event) if chat_id == event.chat_id else None,
     )
     logger.info(f'Imported feed(s) for {chat_id}')
     msg = await send_success_and_failure_msg(reply, **import_result, lang=lang, edit=True)

@@ -156,10 +156,12 @@
         "subscription_title": "Títol personalitzat",
         "feed_url": "URL del canal",
         "hashtags": "Etiquetes",
+        "topic": "Tema",
         "default_emoji_header_description": "%s significa que la subscripció utilitza la configuració predeterminada. Podeu canviar-los mitjançant /set_default."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "La tasca de supervisió ha fallat 100 cops. S'ha desactivat la teva subscripció al canal RSS.\nPer a reactivar-la, utilitza l'ordre /activate_subs."
+        "feed_deactivated_warn": "La tasca de supervisió ha fallat 100 cops. S'ha desactivat la teva subscripció al canal RSS.\nPer a reactivar-la, utilitza l'ordre /activate_subs.",
+        "sub_deactivated_topic_unavailable_warn": "El tema on s'enviava aquesta subscripció està tancat o s'ha eliminat. S'ha desactivat la subscripció.\nPer a reactivar-la, torna a obrir el tema i utilitza l'ordre /activate_subs, o subscriu-te de nou al canal RSS en un altre tema."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "Les subscripcions següents estan desactivades, tria una per a activar-la.\nDesprés d'activar-se, es supervisaran les actualitzacions.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "Ús de l'ordre: <code>/set_title sub_id title</code> \n \nNota: ometeu <code>títol</code> per a esborrar el títol personalitzat (només si s'ha definit prèviament, altrament surt aquest avís).",
         "set_title_success": "El títol personalitzat de la subscripció s'ha canviat a: ",
         "set_title_success_cleared": "S'ha esborrat el títol personalitzat de la subscripció."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Ús de l'ordre: <code>/set_topic sub_id</code>\n\nNota: envia l'ordre dins del tema on vols que s'enviï la subscripció. Si l'envies fora de qualsevol tema, la subscripció s'enviarà al grup mateix. Com que el tema es pren del lloc on s'envia l'ordre, no es pot fer servir per a gestionar un altre xat de manera remota.",
+        "set_topic_success": "A partir d'ara, la subscripció s'enviarà a aquest tema.",
+        "set_topic_success_cleared": "A partir d'ara, la subscripció s'enviarà al grup mateix."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Ús de l'ordre: <code>/set_interval sub_id monitor_interval</code>\n\nNota: <code>monitor_interval</code> ha de ser un enter positiu en minuts (no cal incloure la unitat).",

@@ -155,10 +155,12 @@
         "subscription_title": "Izenburu pertsonalizatua",
         "feed_url": "Jarioaren URL-a",
         "hashtags": "Traolak",
+        "topic": "Gaia",
         "default_emoji_header_description": "Defektuzko ezarpenak hartzen ari zarela da honen esanahia: %s. /set_default erabiliza aldatu dezakezu."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "Monitorizazio lanak 100 aldiz jarraian huts egin du. Zure RSS kanalerako harpidetza desaktibatua izan da.\nBerraktibatzeko, erabili /activate_subs komandoa."
+        "feed_deactivated_warn": "Monitorizazio lanak 100 aldiz jarraian huts egin du. Zure RSS kanalerako harpidetza desaktibatua izan da.\nBerraktibatzeko, erabili /activate_subs komandoa.",
+        "sub_deactivated_topic_unavailable_warn": "Harpidetza hau bidaltzen zen gaia itxita edo ezabatuta dago. Harpidetza desaktibatua izan da.\nBerraktibatzeko, ireki gaia berriro eta erabili /activate_subs komandoa, edo harpidetu berriro RSS kanalera beste gai batean."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "Beheko harpidetzak desaktibatuta daude, aukeratu bat aktiba dadin.\nAktibatu ondoren, eguneraketak monitorizatuak izango dira.",
@@ -174,6 +176,11 @@
         "cmd_set_title_usage_prompt_html": "Komandoaren erabilera: <code>/set_title sub_id izenburua</code>\n\nOharra: ez erabili <code>izenburua</code> izenburu pertsonalizatua ezabatzeko (soilik aurrez ezarri bada, gainontzean abisu hau jasoko da).",
         "set_title_success": "Harpidetzaren izenburu pertsonalizatua hona aldatu da: ",
         "set_title_success_cleared": "Harpidetzaren izenburu pertsonalizatua ezabatu da."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Komandoaren erabilera: <code>/set_topic sub_id</code>\n\nOharra: bidali komandoa harpidetza bidali nahi duzun gaiaren barruan. Gairik gabe bidaltzen baduzu, harpidetza taldera bertara bidaliko da. Gaia komandoa bidaltzen den lekutik hartzen denez, ezin da beste txat bat urrutitik kudeatzeko erabili.",
+        "set_topic_success": "Hemendik aurrera, harpidetza gai honetara bidaliko da.",
+        "set_topic_success_cleared": "Hemendik aurrera, harpidetza taldera bertara bidaliko da."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Komandoaren erabilera: <code>/set_interval sub_id monitorizazioko_denbora_tartea</code>\n\nOharra: <code>monitorizazioko_denbora_tartea</code> zenbaki osoa eta positiboa izan behar du, minututan (ez da beharrezkoa unitatea adieraztea).",

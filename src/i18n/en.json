@@ -156,10 +156,12 @@
         "subscription_title": "Custom title",
         "feed_url": "Feed URL",
         "hashtags": "Hashtags",
+        "topic": "Topic",
         "default_emoji_header_description": "%s means that the subscription is using your default settings. You can change them by using /set_default."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "The monitoring task had failed 100 consecutive times. Your subscription to the RSS feed has been deactivated.\nTo reactivate it, please use the /activate_subs command."
+        "feed_deactivated_warn": "The monitoring task had failed 100 consecutive times. Your subscription to the RSS feed has been deactivated.\nTo reactivate it, please use the /activate_subs command.",
+        "sub_deactivated_topic_unavailable_warn": "The topic this subscription was sending to is closed or deleted. The subscription has been deactivated.\nTo reactivate it, please reopen the topic and use the /activate_subs command, or subscribe to the RSS feed again in another topic."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "The subscriptions below are deactivated, choose one to activate.\nAfter being activated, their updates will be monitored.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "Command usage: <code>/set_title sub_id title</code>\n\nNote: omit <code>title</code> to clear custom title (only if previously set, otherwise get this prompt).",
         "set_title_success": "The custom title of the subscription has been changed to: ",
         "set_title_success_cleared": "The custom title of the subscription has been cleared."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Command usage: <code>/set_topic sub_id</code>\n\nNote: send the command inside the topic you want the subscription to be sent to. Sending it outside any topic makes the subscription be sent to the group itself. As the topic is taken from where the command is sent, it cannot be used to manage another chat remotely.",
+        "set_topic_success": "The subscription will be sent to this topic from now on.",
+        "set_topic_success_cleared": "The subscription will be sent to the group itself from now on."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Command usage: <code>/set_interval sub_id monitor_interval</code>\n\nNote: <code>monitor_interval</code> must be a positive integer in minutes (no need to include the unit).",

@@ -156,10 +156,12 @@
         "subscription_title": "自訂標題",
         "feed_url": "RSS URL",
         "hashtags": "Hashtag",
+        "topic": "話題",
         "default_emoji_header_description": "%s 表示訂閲用緊你嘅預設。你可以用 /set_default 來改咗佢哋。"
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "監視任務已經連續失敗咗 100 次，對呢個 RSS 嘅訂閲已經畀閂咗。\n如果要開返佢，唔該用 /activate_subs 命令。"
+        "feed_deactivated_warn": "監視任務已經連續失敗咗 100 次，對呢個 RSS 嘅訂閲已經畀閂咗。\n如果要開返佢，唔該用 /activate_subs 命令。",
+        "sub_deactivated_topic_unavailable_warn": "呢個訂閲發送緊去嘅話題已經閂咗或者刪咗，訂閲已經停用咗。\n如果要開返佢，唔該重新開返個話題再用 /activate_subs 命令，或者喺第個話題度再訂閲呢個 RSS 源。"
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "呢啲訂閲而家閂咗，唔該選個你想開返嘅訂閲。\n開返之後，會監視訂閲更新。",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "命令用法: <code>/set_title 訂閲編號 標題</code>\n\n注: 忽略 <code>標題</code> 來刪除自訂標題 (只有之前設定過先可以刪除，唔係就會收到呢條提示)。",
         "set_title_success": "訂閱嘅自訂標題已經改做: ",
         "set_title_success_cleared": "訂閱嘅自訂標題已經刪咗。"
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "命令用法: <code>/set_topic 訂閲編號</code>\n\n注: 喺你想個訂閲發送到嘅話題入面發送呢個命令。如果喺話題外面發送，訂閲就會發送去個群組本身。因為話題係睇你喺邊度發送命令，所以唔可以用嚟遙距管理第個對話。",
+        "set_topic_success": "由而家開始，呢個訂閲會發送去呢個話題。",
+        "set_topic_success_cleared": "由而家開始，呢個訂閲會發送去個群組本身。"
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "命令用法: <code>/set_interval 訂閲編號 監視間隔</code>\n\n注: <code>監視間隔</code> 一定要係用分鐘做單位嘅正整數 (唔洗加埋單位)。",

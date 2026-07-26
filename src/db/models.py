@@ -155,6 +155,9 @@ class Sub(Model, Base):
     feed_id: int  # type hint stub
     title = fields.CharField(max_length=1024, null=True, description='Sub title, overriding feed title if set')
     tags = fields.CharField(max_length=255, null=True, description='Tags of the sub')
+    # new field, with description unset to avoid future migration
+    # The id of the forum topic to send posts to, null if the chat is not a topic group or the topic is "General"
+    topic_id = fields.IntField(null=True)
     interval = fields.SmallIntField(
         null=True,
         description='Interval of the sub monitor task, '

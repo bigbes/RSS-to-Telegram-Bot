@@ -94,7 +94,8 @@ class Post:
             display_entry_tags=sub.display_entry_tags if sub.display_entry_tags != -100 else user.display_entry_tags,
             style=sub.style if sub.style != -100 else user.style,
             display_media=sub.display_media if sub.display_media != -100 else user.display_media,
-            silent=not (sub.notify if sub.notify != -100 else user.notify)
+            silent=not (sub.notify if sub.notify != -100 else user.notify),
+            topic_id=sub.topic_id,
         )
 
     async def send_formatted_post(self,
@@ -110,7 +111,8 @@ class Post:
                                   display_entry_tags: int = -1,
                                   style: int = 0,
                                   display_media: int = 0,
-                                  silent: bool = False):
+                                  silent: bool = False,
+                                  topic_id: Optional[int] = None):
         """
         Send formatted post.
 
@@ -128,6 +130,7 @@ class Post:
         :param style: 0=RSStT, 1=flowerss
         :param display_media: -1=disable, 0=enable
         :param silent: whether to send with notification sound
+        :param topic_id: the id of the forum topic to send the post to, `None` to send to the chat itself
         """
         for _ in range(3):
             try:
@@ -154,7 +157,8 @@ class Post:
                                                        html=formatted_post,
                                                        media=self.post_formatter.media if need_media else None,
                                                        link_preview=need_link_preview,
-                                                       silent=silent)
+                                                       silent=silent,
+                                                       topic_id=topic_id)
 
                 return await message_dispatcher.send_messages()
             except MediaSendFailErrors as e:

@@ -156,10 +156,12 @@
         "subscription_title": "Titolo personalizzato",
         "feed_url": "URL del feed",
         "hashtags": "Hashtag",
+        "topic": "Argomento",
         "default_emoji_header_description": "%s significa che la sottoscrizione sta utilizzando le tue impostazioni predefinite. Puoi cambiarle usando /set_default."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "Il compito di monitoraggio è fallito per 100 volte consecutive. Il tuo abbonamento al feed RSS è stato disattivato.\nPer riattivarlo, usa il comando /activate_subs."
+        "feed_deactivated_warn": "Il compito di monitoraggio è fallito per 100 volte consecutive. Il tuo abbonamento al feed RSS è stato disattivato.\nPer riattivarlo, usa il comando /activate_subs.",
+        "sub_deactivated_topic_unavailable_warn": "L'argomento a cui questo abbonamento veniva inviato è chiuso o eliminato. L'abbonamento è stato disattivato.\nPer riattivarlo, riapri l'argomento e usa il comando /activate_subs, oppure abbonati di nuovo al feed RSS in un altro argomento."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "Gli abbonamenti qui sotto sono disattivati, scegline uno da attivare.\nDopo l'attivazione, i loro aggiornamenti saranno monitorati.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "Utilizzo del comando: <code>/set_title sub_id titolo</code>_x000D_\n_x000D_\nNota: ometti <code>titolo</code> per cancellare il titolo personalizzato (solo se precedentemente impostato, altrimenti otterrai questo prompt).",
         "set_title_success": "Il titolo personalizzato dell'iscrizione è stato cambiato in: ",
         "set_title_success_cleared": "Il titolo personalizzato dell'iscrizione è stato cancellato."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Utilizzo del comando: <code>/set_topic sub_id</code>\n\nNota: invia il comando all'interno dell'argomento a cui vuoi che l'abbonamento venga inviato. Se lo invii fuori da ogni argomento, l'abbonamento verrà inviato al gruppo stesso. Poiché l'argomento viene dedotto da dove il comando è inviato, non può essere usato per gestire un'altra chat da remoto.",
+        "set_topic_success": "D'ora in poi l'abbonamento verrà inviato a questo argomento.",
+        "set_topic_success_cleared": "D'ora in poi l'abbonamento verrà inviato al gruppo stesso."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Utilizzo del comando: <code>/set_interval sub_id intervallo_di_monitoraggio</code>_x000D_\n_x000D_\nNota: <code>intervallo_di_monitoraggio</code> deve essere un numero intero positivo in minuti (senza la necessità di includere l'unità).",

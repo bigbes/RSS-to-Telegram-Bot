@@ -156,10 +156,12 @@
         "subscription_title": "Título personalizado",
         "feed_url": "URL de la fuente",
         "hashtags": "Etiquetas",
+        "topic": "Tema",
         "default_emoji_header_description": "%s significa que la suscripción está utilizando tu configuración por defecto. Puedes cambiarla utilizando /set_default."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "La tarea de monitorización ha fallado 100 veces consecutivas. Tu suscripción al canal RSS ha sido desactivada.\nPara reactivarla, utiliza el comando /activate_subs."
+        "feed_deactivated_warn": "La tarea de monitorización ha fallado 100 veces consecutivas. Tu suscripción al canal RSS ha sido desactivada.\nPara reactivarla, utiliza el comando /activate_subs.",
+        "sub_deactivated_topic_unavailable_warn": "El tema al que se enviaba esta suscripción está cerrado o eliminado. La suscripción ha sido desactivada.\nPara reactivarla, vuelve a abrir el tema y utiliza el comando /activate_subs, o suscríbete de nuevo al canal RSS en otro tema."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "Las suscripciones de abajo están desactivadas, elige una para activarla.\nDespués de ser activadas, sus actualizaciones serán monitoreadas.",
@@ -175,6 +177,11 @@
         "cmd_set_title_usage_prompt_html": "Uso del comando: <code>/set_title sub_id título</code>\n\nNota: omite <code>título</code> para borrar el título personalizado (sólo si se ha configurado previamente, de lo contrario se obtiene este aviso).",
         "set_title_success": "El título personalizado de la suscripción se ha cambiado a: ",
         "set_title_success_cleared": "El título personalizado de la suscripción ha sido borrado."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Uso del comando: <code>/set_topic sub_id</code>\n\nNota: envía el comando dentro del tema al que quieras que se envíe la suscripción. Si lo envías fuera de cualquier tema, la suscripción se enviará al grupo mismo. Como el tema se toma del lugar desde donde se envía el comando, no se puede usar para gestionar otro chat de forma remota.",
+        "set_topic_success": "A partir de ahora, la suscripción se enviará a este tema.",
+        "set_topic_success_cleared": "A partir de ahora, la suscripción se enviará al grupo mismo."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Uso del comando: <code>/set_interval sub_id intervalo_monitoreo</code>\n\nNota: <code>intervalo_monitoreo</code> debe ser un número entero positivo en minutos (no es necesario incluir la unidad).",

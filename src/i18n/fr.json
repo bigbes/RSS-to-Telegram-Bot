@@ -153,10 +153,12 @@
         "subscription_title": "Titre personnalisé",
         "feed_url": "URL du feed",
         "hashtags": "Hashtags",
+        "topic": "Sujet",
         "default_emoji_header_description": "%s indique que vos abonnements utilisent vos paramètres par défaut. Vous pouvez les changez en utilisant /set_default."
     },
     "l10n_monitor_warn": {
-        "feed_deactivated_warn": "La tâche de surveillance a échoué 100 fois de suite. Votre abonnement au flux RSS a été désactivé.\nPour le réactiver, veuillez utiliser la commande /activate_subs."
+        "feed_deactivated_warn": "La tâche de surveillance a échoué 100 fois de suite. Votre abonnement au flux RSS a été désactivé.\nPour le réactiver, veuillez utiliser la commande /activate_subs.",
+        "sub_deactivated_topic_unavailable_warn": "Le sujet auquel cet abonnement était envoyé est fermé ou supprimé. L'abonnement a été désactivé.\nPour le réactiver, veuillez rouvrir le sujet et utiliser la commande /activate_subs, ou vous abonner de nouveau au flux RSS dans un autre sujet."
     },
     "l10n_cmd_activate": {
         "choose_sub_to_be_activated": "Les abonnements ci-dessous sont désactivés, choisissez en un à activer.\nAprès l'avoir activé, les mise à jours seront surveillés.",
@@ -172,6 +174,11 @@
         "cmd_set_title_usage_prompt_html": "Utilisation de la commande : <code>/set_title sub_id titre</code>\n\nNote : omettez <code>titre</code> pour effacer le titre personnalisé (uniquement s'il a déjà été défini).",
         "set_title_success": "Le titre personnalisé de cet abonnement à été changé pour : ",
         "set_title_success_cleared": "Le titre personnalisé de l'abonnement à été effacé."
+    },
+    "l10n_cmd_set_topic": {
+        "cmd_set_topic_usage_prompt_html": "Utilisation de la commande : <code>/set_topic sub_id</code>\n\nNote : envoyez la commande dans le sujet auquel l'abonnement doit être envoyé. Si vous l'envoyez en dehors de tout sujet, l'abonnement sera envoyé au groupe lui-même. Comme le sujet est déterminé par l'endroit d'où la commande est envoyée, elle ne peut pas servir à gérer une autre discussion à distance.",
+        "set_topic_success": "L'abonnement sera désormais envoyé dans ce sujet.",
+        "set_topic_success_cleared": "L'abonnement sera désormais envoyé dans le groupe lui-même."
     },
     "l10n_cmd_set_interval": {
         "cmd_set_interval_usage_prompt_html": "Usage de la commande <code>/set_interval sub_id monitor_interval</code>\n\nNote : <code>monitor_interval</code> doit être un nombre entier positif en minutes (il n'est pas nécessaire d'inclure l'unité).",

@@ -22,8 +22,10 @@ import asyncio
 import re
 from collections import defaultdict
 from itertools import chain, repeat
+from cachetools import TTLCache
 from telethon import Button
-from telethon.tl.types import KeyboardButtonCallback
+from telethon.tl.functions.channels import GetForumTopicsByIDRequest
+from telethon.tl.types import KeyboardButtonCallback, ForumTopic
 
 try:
     from isal.isal_zlib import crc32
@@ -36,6 +38,43 @@ from ...i18n import i18n
 logger = log.getLogger('RSStT.command')
 
 emptyButton = Button.inline(' ', data='null')
+
+# {(chat_id, topic_id): topic title}, topics are rarely renamed, but the cache must not outlive a rename by long
+TopicTitleCache: TTLCache = TTLCache(maxsize=256, ttl=60 * 10)
+
+
+async def get_topic_titles(chat_id: int, topic_ids: Iterable[int]) -> dict[int, str]:
+    """
+    Get the titles of forum topics, so that a subscription can tell where it sends to.
+
+    :param chat_id: the id of the topic group
+    :param topic_ids: the ids of the topics to get the titles of
+    :return: {topic id: topic title}, lacking the topics that could not be fetched (deleted ones, for instance)
+    """
+    titles: dict[int, str] = {}
+    missing_ids: list[int] = []
+    for topic_id in set(topic_ids):
+        cached = TopicTitleCache.get((chat_id, topic_id))
+        if cached is not None:
+            titles[topic_id] = cached
+        else:
+            missing_ids.append(topic_id)
+
+    if not missing_ids:
+        return titles
+
+    try:
+        res = await env.bot(GetForumTopicsByIDRequest(await env.bot.get_input_entity(chat_id), missing_ids))
+    except Exception as e:
+        # not a forum anymore, the bot was kicked, etc. The ids will be shown instead of the titles.
+        logger.debug(f'Failed to fetch the titles of the topics of {chat_id}:', exc_info=e)
+        return titles
+
+    for topic in res.topics:
+        if isinstance(topic, ForumTopic):  # the deleted ones are `ForumTopicDeleted`, which have no title
+            titles[topic.id] = topic.title
+            TopicTitleCache[(chat_id, topic.id)] = topic.title
+    return titles
 
 
 def parse_hashtags(text: str) -> list[str]:
